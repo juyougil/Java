@@ -26,6 +26,14 @@ public class CharacterEx1 {
 	}
 
 }
+출력물
+A
+65
+B
+67
+C
+318
+ľ
 
 ## '한'을 유니코드로 표현해보기
 
@@ -44,6 +52,9 @@ public class CharacterEx2 {
 	}
 
 }
+출력물
+한
+한
 
 ## 문자형 변수에 숫자를 저장했을 경우 
 
@@ -58,12 +69,18 @@ public class CharacterEx3 {
 		
 		char a2 =65;
 		//char b2 = -66; // 문자형 변수에 음수를 넣으면 오류 발생
-		// 출력물
-		System.out.println((char)a); //	A
-		System.out.println((char)b); //	?
-		System.out.println(a2);	     //	A
+		
+		System.out.println((char)a); 
+		System.out.println((char)b); 
+		System.out.println(a2);	     
 	}
 
 }
 
+
+
+출력물
+A
+ﾾ
+A
 
