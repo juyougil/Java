@@ -1,11 +1,11 @@
 ## Scanner 사용법
 
-package kr.java.chapter3;
-import  java.util.Scanner;
+package kr.java.chapter3;  
+import  java.util.Scanner;  //중요  
 public class Test_scanner {
 
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in); // 중요
 		
 		
 		System.out.println("1. " );
