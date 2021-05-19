@@ -41,3 +41,30 @@ public class Test_scanner {
 	}
 
 }
+
+## 문자
+package kr.java.chapter3;
+
+import  java.util.Scanner;// Scanner는 java.lang(기본패캐지)에없기때문에 임포트
+
+public class ScannerTest {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("이름 :" );
+		String name = scanner.nextLine();
+		System.out.println("직업 :");                   
+		String jop = scanner.nextLine();
+		System.out.println("사번:");
+		int num = scanner.nextInt();
+		
+		System.out.println(name);
+		System.out.println(jop);
+		System.out.println(num);
+		
+
+	}
+
+}
+
