@@ -49,4 +49,25 @@ public class page123_2 {
 
 ## 3번 문제
 
+package homework_5_18;
+
+public class page123_3 {
+
+	public static void main(String[] args) {
+		int dan;
+		int num;
+		
+		for(dan =1; dan < 10; dan++) {
+			for(num =1; num <10; num ++ ) {
+				if(dan < num) 
+					break;
+					System.out.println(dan+"*"+num+"="+(dan*num));
+			}
+		}
+
+	}
+}
+
+## 4번 문제
+
 
