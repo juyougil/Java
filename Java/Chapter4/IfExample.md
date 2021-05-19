@@ -93,3 +93,31 @@ public class IfStatementExam {
 	}
 	}
 }
+
+## 실습
+package kr.java.chapter4;
+
+import java.util.Scanner;
+
+public class InputIfExam {
+
+	public static void main(String[] args) {
+		// 실습
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("정수 입력");
+		String str = scanner.nextLine();
+		
+		int num = Integer.parseInt(str);
+		
+		if ((num == 0) || (num < 0) ) {
+			System.out.println("양수를 입력하세요!");
+		}
+		else {
+			System.out.println(num);
+		}
+
+	}
+
+}
+
