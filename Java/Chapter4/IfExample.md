@@ -47,3 +47,49 @@ public class IfExample {
 	}
 
 }
+
+package kr.java.chapter4;
+
+import java.util.Scanner;
+
+public class IfStatementExam {
+
+	public static void main(String[] args) {
+	
+		int age = 10;	
+			//조건	
+		if(age >= 8) { //조건이 true 인경우.
+			System.out.println("8살 이상이네요.");
+		}
+		else {//조건이 false 인경우.
+			System.out.println("8살 이하!!!.");
+			
+			
+		//복합 조건
+		int age2 = 10;
+			// 8살 이상이고 age2 10 보다 큰거.
+		if((age >= 8) && (age2 > 10)) { //조건이 true 인경우.
+			System.out.println("8살 이상이네요.");
+			}
+		else {//조건이 false 인경우.
+			System.out.println("8살 이하!!!.");	
+				
+		// 실습
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("1. " );
+		int num = scanner.nextInt();
+		
+		if (num > 0) {
+			System.out.println(num);
+		}
+		else {
+			System.out.println("양수를 입력하세요!");
+		}
+		
+		
+		
+	}
+	}
+	}
+}
