@@ -13,4 +13,5 @@ public class SizeOfTypes {
 
 }
 */
-//변수의 크기
+//변수의 크기 (바이트로 표현)
+
