@@ -31,12 +31,13 @@ package homework_5_18;
 public class page123_2 {
 
 	public static void main(String[] args) {
-		int dan = 5;
+		int dan;
 		int num;
 		
-		 for(num =1; num < 10; num++) {
-			 if(num % 3 == 0)
+		 for(dan =1; dan < 10; dan++) {
+			 if(dan % 2 != 0)
 				 continue;
+				 for(num =1; num < 10;num++) {
 			 System.out.println(dan + "*" + num +"="+ num * dan);
 		 }
 		 
@@ -44,7 +45,7 @@ public class page123_2 {
 	}
 
 }
-
+}
 
 ## 3번 문제
 
