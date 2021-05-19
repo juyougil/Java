@@ -39,12 +39,12 @@ public class page123_2 {
 				 continue;
 				 for(num =1; num < 10;num++) {
 			 System.out.println(dan + "*" + num +"="+ num * dan);
-		 }
+			 }
 		 
 
-	}
+		}
 
-}
+	}
 }
 
 ## 3번 문제
