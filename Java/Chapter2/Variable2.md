@@ -1,4 +1,4 @@
-##자료형의 최소 최대값
+## 자료형의 최소 최대값
 
 package kr.java.chapter2;
 
