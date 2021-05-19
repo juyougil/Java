@@ -1,4 +1,6 @@
-/*
+## Chapter2
+1. 변수의 크기 (바이트 표현)
+
 package kr.java.chapter2;
 
 public class SizeOfTypes {
@@ -12,6 +14,6 @@ public class SizeOfTypes {
 			}
 
 }
-*/
-//변수의 크기 (바이트로 표현)
+
+
 
