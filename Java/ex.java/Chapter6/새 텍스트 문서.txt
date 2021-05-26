@@ -1,1 +1,0 @@
-java -cp . ex.java.input.Test
