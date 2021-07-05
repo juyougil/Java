@@ -12,6 +12,7 @@
 
 연봉등급을 관리하고 싶어요    
 관리하고 싶은 정보는 연봉등급, 등급별최소연봉, 등급별최대연봉
+<img src="dept.employee.cutomer.salary table.jpg">
 
 ---
 ### king 계정만들기
