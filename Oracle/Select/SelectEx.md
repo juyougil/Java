@@ -946,3 +946,222 @@ dual 실존하지 않는 더미 테이블. 테이블없이 그냥 출력하고�
 ```
 select * from employee where jikup = '과장'
 ```
+
+#### <51> employee 테이블에서 직급이 과장이 아닌 직원을 검색하면?
+```
+	select * from employee where jikup != '과장'
+	select * from employee where jikup <> '과장'
+```
+
+#### <52> employee 테이블에서 부서번호가 10번 이고 직급이 과장인 직원을 검색하면?
+```
+select * from employee where dep_no = 10 and jikup ='과장'
+```
+
+#### <53> employee 테이블에서 직급이 과장 또는 부장인 직원을 검색하면?
+```
+	select * from employee where jikup ='부장' or jikup ='과장'
+	      
+	select * from employee where jikup in('부장','과장') 
+	
+	select * from employee where jikup = any('부장','과장'); -- any -> = 필요
+```
+
+#### <54> employee 테이블에서 10번, 20번, 부서 중에 직급이 과장인 직원을 검색하면?
+```
+	select *from employee where (dep_no = 10 or dep_no = 20)  and jikup ='과장'
+
+	select *from employee where dep_no in(10,20) and jikup ='과장' -- in(or)이 먼저 비교
+
+	select *from employee where dep_no = any(10,20) and jikup ='과장' 
+```
+
+#### <55> customer 테이블에서 담당직원이 없는 고객을 검색하면?
+```
+select * from customer where emp_no is null
+```
+
+#### <56> customer 테이블에서 담당직원이 있는 고객을 검색하면?
+```
+select * from customer where emp_no is not null
+
+```
+
+#### <57> customer 테이블에서 담당직원 번화가 9번이 아닌 고객을 검색하면?
+```
+	select * from customer where emp_no !=9 or emp_no is null 	--> null 값도 찾게 만듬
+	---------------------------------------------------------
+	<주의>emp_no is null 조건도 붙이는 이유는 emp_no가 NULL 일 경우
+		emp_no != 9 조건에 포함되지 않기 때문이다.
+		즉 NULL 은 is null 또는 is not null 연산자에 의해서만 검색된다.
+```
+
+#### <58> employee 테이블에서 연봉이 3000만원~4000만원 사이인 직원을 검색하면?
+```
+   	select * from employee where salary >= 3000 and salary <= 4000     
+   	select * from employee where salary between 3000 and 4000
+	-----------------------------------------------------------------
+	컬럼명 between n1 and n2
+```
+
+#### <59> employee 테이블에서 연봉이 3000만원 이상 4000만원 미만 사이인 직원을 검색하면?
+```
+	select * from employee where salary >= 3000 and salary < 4000
+
+	select * from employee where salary between 3000 and 4000 and salary != 4000    
+```
+
+#### <60> employee 테이블에서 연봉을 5% 인상했다고 가정하고 3000 이상인 직원을 검색하면?
+```
+select * from employee where salary*1.05 >=3000
+```
+
+#### <61> employee 테이블에서 입사일이 '1995-1-1' 이상인 직원을 검색하면?
+```
+	select * from employee where hire_date >= to_date('1995-1-1','YYYY-MM-DD')   
+	---
+	날짜 자료형으로  통일
+```
+
+#### <62> employee 테이블에서 입사일이 1990년~1999년 사이인 직원을 검색하면?
+```
+    select * from employee where hire_date >= to_date('19900101','YYYYMMDD') 
+                                 and
+                                 hire_date <= to_date('20000101','YYYYMMDD')
+
+    
+    select * from employee where hire_date between to_date('19900101','YYYYMMDD') 
+                                 and 
+                                 last_day(to_date('20000101','YYYYMMDD'))
+
+    
+    select * from employee where to_number(to_char(hire_date,'YYYY')) between 1990 and 1999;
+```
+
+#### <63> employee 테이블에서 부서번호가 10번 또는 30번인 직원 중에 연봉이 3000 미만이고 입사일이 '1996-01-01' 미만 직원을 검색하면?
+```
+    select * from employee where dep_no in(10,30) and salary < 3000 and hire_date < to_date('1996-01-01','YYYY-MM-DD');
+
+
+    select * from employee where dep_no = any(10,30) and salary < 3000 and to_number(to_char(hire_date,'YYYY')) < 1996
+
+
+    select * from employee where (dep_no =10 or dep_no = 30) and salary < 3000 and hire_date <= last_day(to_date('19951201','YYYYMMDD'))
+```
+
+#### <64> employee 테이블에서 성이 김씨인 직원을 검색하면?
+```
+	select * from employee where substr(emp_name,1,1) = '김'
+
+	select * from employee where emp_name like '김%';
+	--------------------------------------------------------------------------------
+	where 컬럼명 like '패턴문자열' => 컬럼명 안의 데이터가 패턴문자열을 갖고 있으면 그 행을 검색하라.
+	--------------------------------------------------------------------------------
+	emp_name like '김%';
+	--------------------------------------------------------------------------------	
+		=>김이 첫글자고 두번째는 무엇이 와도 좋고 길이에 제한없는 문자패턴을 골라라
+		=>문자패턴 안의 % 는 무엇이 와도 좋고 길이에 제한없음의 의미이다. 
+	--------------------------------------------------------------------------------
+	emp_name like '%김';
+	--------------------------------------------------------------------------------
+		=> 이름이 김으로 끝나는 직원
+```
+
+#### <65> employee 테이블에서 성이 황씨인 직원을 검색하면?
+```
+	select * from employee where substr(emp_name,1,1) = '황' and substr(emp_name,1,2) <> '황보'
+
+	select * from employee where emp_name like '황%' and emp_name not like '황보'
+```
+
+#### <66> employee 테이블에서 이름이 2자인 직원을 검색하면?
+```
+	select * from employee where length(emp_name) = 2;
+	--------------------------------------------------
+	length(컬럼명)	=> 컬럼명 안의 문자데이터의 길이(정수)를 리턴해주는 함수
+```
+
+#### <67> employee 테이블에서 이름이 김으로 끝나는 직원을 검색하면?
+```
+	select * from employee where emp_name like '%김';
+
+	select * from employee where substr(emp_name,length(emp_name),1) = '김'
+```
+
+#### <68> employee 테이블에서 성이 김씨이고 3글자인 직원을 검색하면?
+```
+	select * from employee where emp_name like '김%' and length(emp_name) = 3;
+
+	select * from employee where substr(emp_name,1,1) = '김' and length(emp_name) = 3;
+    
+    	select * from employee where emp_name like '김__'
+	-------------------------------------------------
+	__ 길이지정
+```
+
+#### <69> employee 테이블에서 이름 김이란 문자를 가진 직원을 검색하면?
+```
+	select * from employee where emp_name like '%김%'
+	----------------------------------------------
+	%김% => 김이 중간에 들어가는 것이 아닌 김이 들어간 것을 검색
+```
+
+#### <70>   employee 테이블에서 성이 김씨가 아닌 직원을 검색하면?
+```
+select * from employee where emp_name not like '김%';
+
+```
+
+#### <71> employee 테이블에서 이름 중간에만 김이 들어간 직원을 검색하면?
+```
+    	select * from employee
+    	where
+        	emp_name like '%김%'
+        	and emp_name not like '김%'
+        	and emp_name not like '%김'
+```
+
+#### <72> employee 테이블에서 여성 직원을 검색하면?
+```
+    select * from employee where substr(jumin_num,7,1) in('2','4')
+    
+    select * from employee where substr(jumin_num,7,1) = '2' or substr(jumin_num,7,1) = '4'
+    
+    select * from employee where jumin_num like '______2%'  or jumin_num like '______4%'
+	----------------------------------------------------
+	만약 주민번호 중간에 - 가 있다면 아래 처럼해도 된다.
+	----------------------------------------------------
+	select * from employee where
+		jumin_num like '%-2%' or jumin_num like '%-4%'
+```
+
+#### <73> employee 테이블에서 1960년대, 1970년대 출생자중 남자만 검색하면?
+```
+    select *
+    from employee
+    where
+    	case substr(jumin_num,7,1) 
+		when '1' then '19' 
+		when '2' then '19' 
+		else '20' end || substr(jumin_num,1,1) in(196,197) 
+		and substr(jumin_num,7,1) in('1','3')
+
+    select *
+    from employee
+    where
+    	(substr(jumin_num,1,1) = '6' 
+	or substr(jumin_num,1,1) = '7') 
+	and substr(jumin_num,7,1)=1
+
+    select *
+    from employee
+    where
+    	substr(jumin_num,1,1) in('6','7') 
+	and substr(jumin_num,7,1)=1
+
+    select *
+    from employee
+    where
+    	jumin_num like '6_____1%' 
+	or jumin_num like '7_____1%'
+```
