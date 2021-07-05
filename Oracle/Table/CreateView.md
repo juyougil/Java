@@ -103,3 +103,20 @@ from
 	성공.WITH CHECK OPTION이 있으면 where 조건에 위배되는 입력, 수정이 발생한 경우에만 불가능하다.
 	현재 5% 인하해서 3100 밑으로 내려가는 직원이 없으므로 이번 update는 성공한다.
 ```
+#### <10> 부서별, 직급별로 [부서번호], [부서명], [직급], [평균연봉]을 출력하는 employee_vw3를 생성하면?
+```
+ create view employee_vw3 as
+    select
+        d.dep_no "dep_no"
+        ,d.dep_name "dep_name"
+        ,e.jikup       "jikup"
+        ,avg(e.salary)  "avg_salary"
+    from
+        dept d, employee e
+    where
+        d.dep_no=e.dep_no
+    group by
+        d.dep_no,d.dep_name, e.jikup
+    order by
+        "dep_no", "avg_salary"  desc
+```
