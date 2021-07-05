@@ -280,13 +280,21 @@ select * from employee where salary >= (select avg(salary) from employee);
     	from
         		customer c left outer join employee e on c.emp_no=e.emp_no and e.dep_no= 10
 ```
+#### <15> 부서별 [부서번호], [부서명], [직원수], [관리고객수]를 검색하면?
+```
+    	select
+        		d.dep_no
+        		,d.dep_name
+        		,(select count(e.emp_no) from employee e where e.dep_no=d.dep_no) "직원수"
+        		,(select count(e.emp_no) from employee e, customer c where e.emp_no=c.emp_no and e.dep_no=d.dep_no)  "관리고객수"
+    	from
+        		dept d
 
-
-
+```
 
 
 ## self join
-#### <15> [직원번호], [직원명], [연봉], [연봉순위]을 검색하면?
+#### <16> [직원번호], [직원명], [연봉], [연봉순위]을 검색하면?
 ```
     	select
         	e1.emp_no
@@ -300,7 +308,7 @@ select * from employee where salary >= (select avg(salary) from employee);
 	내 연봉보다 높은 사람의 수를 카운트
 ```
 
-#### <16> [직원번호], [직원명], [직급], [주민번호], [직급서열순위]을 출력하면? 단 직급이 같으면 나이 많은 직원이 [직급서열순위] 위이다. 그리고 [직급서열순위] 오름차순 유지
+#### <17> [직원번호], [직원명], [직급], [주민번호], [직급서열순위]을 출력하면? 단 직급이 같으면 나이 많은 직원이 [직급서열순위] 위이다. 그리고 [직급서열순위] 오름차순 유지
 ```
     	select
         		e1.emp_no
@@ -322,7 +330,7 @@ select * from employee where salary >= (select avg(salary) from employee);
     	order by 5 asc;
 ```
 
-#### <17> 직원들이 있는 부서별로 [부서번호], [부서위치], [직원수]를 출력하면?
+#### <18> 직원들이 있는 부서별로 [부서번호], [부서위치], [직원수]를 출력하면?
 ```
     	select
         		d.dep_no
@@ -333,7 +341,7 @@ select * from employee where salary >= (select avg(salary) from employee);
     	where (select count(*) from employee e where e.dep_no=d.dep_no)>0
 ```
 
-#### <18> 퇴직일이 60세 라는 기준 하에 아래 처럼 출력하면? [직원번호], [직원명], [근무년차], [퇴직일까지 남은 년도], [생일(년-월-일 요일명)],[소속부서명], [직속상관명], [직속상관부서명] 단 모든 직원 다 나오고, 직급 높으면 먼저 나오고 직급이 같으면 나이가 많은 사람이 나와야 함
+#### <19> 퇴직일이 60세 라는 기준 하에 아래 처럼 출력하면? [직원번호], [직원명], [근무년차], [퇴직일까지 남은 년도], [생일(년-월-일 요일명)],[소속부서명], [직속상관명], [직속상관부서명] 단 모든 직원 다 나오고, 직급 높으면 먼저 나오고 직급이 같으면 나이가 많은 사람이 나와야 함
 ```
 	    select
         		e1.emp_no
