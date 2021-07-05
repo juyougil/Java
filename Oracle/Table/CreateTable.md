@@ -253,3 +253,22 @@ select * from salary_grade;
 ```
 commit;
 ```
+
+
+
+#### employee 와 똑같은 구조와 똑같은 데이터를 가진 쌍둥이 테이블 employee2 만들면?
+```
+	create table employee2 as select * from employee;
+	---------------------------------------------------------
+	위 SQL 구문은 select 결과물을 실존 테이블로 만드는 SQL 구문이다.
+	위 SQL 구문으로 테이블 복사하면 데이터, 자료형, 자료형크기, not null 제약 조건만 그대로 복사된다.
+	<주의> not null 제약 조건 이외의 제약 조건은 따라오지 않는다.
+```
+
+#### employee 와 똑같은 구조와 똑같은 데이터를 가진 쌍둥이 테이블 employee3 만들되 데이터는 복사해 오지 않으려면?
+```
+	create table employee3 as select * from employee where 1=2;
+	-------------------------------------------------------------------------------------------
+	where 조건절에 계속 false가 되는 조건을 걸면 컬럼명, 자료형, 자료형크기, not null 제약조건만 그대로 복사되고
+	데이터는 복사되지 않는다.
+```
