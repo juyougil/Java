@@ -279,53 +279,53 @@ customer||||
 - group by   		=> 통계 관련 작업
 
 ## 오라클의 자주 사용되는 숫자함수
-- abs(n)
+- #### abs(n)
 	- 숫자 n의 절대값을 반환.
 
-- floor(n)
+- #### floor(n)
 	- 숫자 n이 정수면 그대로 반환하고, 실수면 실수보다 작으면서 
 		제일 가까운 정수를 반환
 	- 좌표계에서 쿵 찍어서 왼쪽 정수값
 
-- ceil(n)
+- #### ceil(n)
 	- 숫자 n이 정수면 그대로 반환하고, 실수면 실수보다 크면서
 	  	제일 가까운 정수를 반환
 	- 좌표계에서 쿵 찍어서 오른쪽 정수값
 
-- round(n,m)
+- #### round(n,m)
 	- n의소수를 m자리 까지 표현 반올림은 m+1자리에서 발생
 
-- trunc(n,m)
+- #### trunc(n,m)
 	- 숫자 n 에서 소수 m+1 자리부터 버림.
 
-- sign(n) 
+- #### sign(n) 
 	- n>0 면 1, n<0 면 -1, n=0이면 0을 반환.
 
-- mod(n,m)
+- #### mod(n,m)
 	- n / m 후 나머지 값을 반환
 
-- power(n,m)
+- #### power(n,m)
 	- n의 m 승을 반환.  
 
 ## <15> 오라클의 자주 사용되는 문자 함수
-- chr(n)
+- #### chr(n)
 	- 정수 n을 ascii(아스키) 문자기호로 리턴한다.
-- upper(s)
+- #### upper(s)
 	- 문자열 s을 대문자로 변환시켜 리턴한다.
-- lower(s)
+- #### lower(s)
 	- 문자열 s을 소문자로 변환시켜 려턴한다.
-- length(s)
+- #### length(s)
 	- 문자열 s의 길이를 리턴한다.
-- substr(s, n1, n2)
+- #### substr(s, n1, n2)
 	- 문자열 s에서 n1 번째 자리부터 n2개 까지의 문자를 리턴한다.
 	- n2 생략 시 마지막 까지 문자를 리턴한다.
 	- n1 이 0일 경우 1로 바꿔 실행된다.
 	- 자리수는 n1>0(양수) 경우 왼쪽부터, n1<0(음수) 경우 오른쪽부터 샘한다.
-- trim(s)
+- #### trim(s)
 	- 문자열 s의 맨좌우측의 공백을 제거하여 리턴한다.
 		제거 후 또 있으면 계속 제거 후 리턴한다.
 	
-- replace( s1, s2, s3 )
+- #### replace( s1, s2, s3 )
 	- 문자열 s1에서 s2를 s3로 수정해서 리턴한다.
 	- <예>
 	```
@@ -333,25 +333,25 @@ customer||||
 	select replace( 'You are not alone', 'not' ) from dual;      not이 없어짐
 	select translate( 'You are not alone', 'You', 'We' ) from dual; 대응되는 문자를 바꿈 y -> w o-> e
 	```
-- initcap( s )
+- #### initcap( s )
 	- 문자열 s에서 각 단어의 첫 문자만 대문자로 변환하고 나머지는
 		모두 소문자로 리턴한다.
 	```
 	select  initcap( 'abc def' ) from dual;
 	```
-- lpad( s1, n, s2 )
+- #### lpad( s1, n, s2 )
 	- n 자리 만큼 확보하고 s1을 오른쪽 정렬 후 왼쪽에 생긴 빈 공백에
 	  	문자열 s2를 채워 리턴한다.
 	```
 	select lpad( 'abc', 7, ' ' ) from dual;
 	```
-- rpad( s1, n, s2 )
+- #### rpad( s1, n, s2 )
 	- n 자리 만큼 확보하고 s1을 오른쪽 정렬 후 왼쪽에 생긴 빈 공백에
 	  	문자열 s2를 채워 리턴한다.
 	```
 	select lpad( 'abc', 7, ' ' ) from dual;
 	```
-- instr( s1, s2, n1, n2 )
+- #### instr( s1, s2, n1, n2 )
 	- ( s1:타겟문자, s2:찾을문자, 에서 n1:검색시작위치, n2:몇번째 )
 	- <주의>오라클에서 위치를 따질 때 시작은 0이 아니라 1이다.
 	- 문자열 s1 에서 문자열 s2 가 있는 위치 반환. (자바의 indexOf(~) 와 비슷한 기능)
@@ -365,20 +365,20 @@ customer||||
 	```
 	
 ## <16> 날짜 함수 (리턴값의 자료형을 조심)
-- months_between(날짜1,날짜2)
+- #### months_between(날짜1,날짜2)
 	- 날짜1과 날짜2의 차이를 [개월수]로 리턴
-- add_months(날짜1,개월수)
+- #### add_months(날짜1,개월수)
 	- 날짜1에 개월수 만큼 더한 [날짜]를 리턴
-- last_day(날짜)
+- #### last_day(날짜)
 	- 날짜가 속한 달의 마지막 [날짜]를 리턴하기 날짜
-- next_day(날짜,요일정수)
+- #### next_day(날짜,요일정수)
 	- 날짜 기준으로 돌아올 요일의 [날짜]를 리턴
 		요일 정수는 1~7(일~토)
-- 날짜1-날짜2
+- #### 날짜1-날짜2
 	- 날짜1과 날짜2의 차이를 [일수]로 리턴하기
-- 날짜+정수
+- #### 날짜+정수
 	- 날짜에다 정수만큼의 일수를 대한 만큼의 날의 날짜를 리턴하기
-- 날짜-정수
+- #### 날짜-정수
 	- 날짜에다 정수만큼의 일수를 뺀 만큼의 날의 날짜를 리턴하기
 
 ## <17> 문자패턴검색
@@ -387,16 +387,243 @@ customer||||
 		- 김이 첫글자고 두번째는 무엇이 와도 좋고 길이에 제한없는 문자패턴을 골라라
 		- 문자패턴 안의 % 는 무엇이 와도 좋고 길이에 제한없음의 의미이다. 
 	- <예> select * from employee where emp_name like '%김';
-		-김으로 끝나는 문자패턴을 골라라.
+		- 김으로 끝나는 문자패턴을 골라라.
 	- <예> select * from employee where emp_name like '%김%';
 		- 김이 들어간 문자패턴을 골라라.
 
+## <18> Join이란?
+- 2개 이상의 테이블로 부터 컬럼을 복사해서 횡으로 붙이는 작업을 말한다.
+- join은 서로다른 테이블의 행을 붙여 유저가 보기 쉽게 만듬
+- inner join과 outer join의 조건이 같다면 결과는 같을 수 있다.
+
+### join(조인)의 종류
+- #### inner join
+	- 조인 조건에  맞는 행만 포함하는 조인. 대부분이 이 조인이다. (=내부조인이라고도 한다)  
 	
+	사용예시
+	```
+	select e.emp_no
+           	,e.emp_name
+        	,d.dep_name
+    	from 
+		employee e, dept d
+        where 
+		e.dep_no = d.dep_no;
+		
+	ANSI Join	
+	select
+		e.emp_no
+		,e.emp_name
+		,d.dep_name
+	from
+		employee e inner join dept d
+	on
+		e.dep_no=d.dep_no;
+	
+	```
+- #### outer join
+	- 조인 조건에 만족하지 못한 행도 출력하는 조인이다.
+	
+	사용예시
+	```
+	select
+        	c.cus_name  고객명
+        	,c.tel_num  고객전화번호
+        	,e.emp_name 담당직원명
+        	,e.jikup    담당직원직급
+    	from
+        	customer c, employee e
+    	where
+        	c.emp_no=e.emp_no(+);
+	
+	ANSI Join
+	select
+        	c.cus_name  고객명
+        	,c.tel_num  고객전화번호
+        	,e.emp_name 담당직원명
+        	,e.jikup    담당직원직급
+    	from
+        	customer c left outer join employee e 
+	on
+		c.emp_no=e.emp_no(+)
+	```
+- #### self join
+	- 1개의 테이블을 2개 이상으로 보고 하는 조인이다.
 
+	사용예시
+	```
+	select
+       		employees.emp_name   부하직원명
+        	,employees.jikup     부하직원직급
+        	,mgr.emp_name        직속상관명
+        	,mgr.jikup           직속상관직급
+   	 from
+        	employee employees, employee mgr
+    	where
+       		 employees.mgr_emp_no = mgr.emp_no and employees.mgr_emp_no is not null;
+	```
+- #### cross join
+	- 2개 이상 테이블에서 각각의 행이 모두 연결되는 조인이다. 연결 조건이 생략된다.
+		잘 사용되지 않는 조인이다.
+### ANSI 조인형식과 오라클 조인 정의
+- #### ANSI 조인
+	- 모든 DB 업체에서 공용으로 사용되는 조인이다.
+- #### 오라클 조인
+	- 오라클에서만 사용되는 조인이다.
 
+## <19> union, union all 이란?
+- 서로 다른 테이블의 컬럼을 종으로 붙이는 작업을 말한다.
+- union는 중복제거, union all 중복허용이다.    
 
+사용예시
+```
+select emp_name||'직원', phone_num from employee
+union 
+select cus_name|| '고객', tel_num from customer;
+```
+### union 규칙
+- 컬럼의 개수가 일치해야한다.
+- 붙는 컬럼의 자료형이 일치해야한다.
 
+## <20> subquery(서브쿼리)란?
+- select, insert, update, delete 구문 안에 들어 있는 또 다른 select 문을 말한다.
+- <주의> from 절에 나오는 select는 서브쿼리가 아니라 inline(인라인뷰)라고 부른다.
 
+- #### 서브쿼리 사용 시 주의점
+	- select, update, delete 안의 서브쿼리는 꼭 ( ) 로 묶는다.
+	- 경우에 따라 조인대신 서브쿼리를 써도 같은 결과를 낼 수 있다. 이때 join 보다 서브쿼리의 부하가 더 많이 걸린다.
+- #### 서브쿼리 종류
+	- 비상관쿼리(Noncorrelated Suubquery)
+		- [서브쿼리]와[외부쿼리]가 연관성이 없다.
+		- [서브쿼리] 실행 후의 결과값을 가지고 [외부 쿼리] 실행된다.
+		```
+		select * from employee where salary >= (select avg(salary) from employee);
+		```
+	- 상관커리(correlated Subquery) (중요)
+		- [서브쿼리]와[외부쿼리]가 연관성이 있다.
+		- [서브쿼리]와[외부쿼리]가 서로 통신하면서 쿼리가 진행된다.
+		
+		사용예시
+		```
+		select
+			e.emp_no
+			,e.emp_name
+			,e.jikup
+		from
+			employee e
+		where (select count(*) from customer c where e.emp_no =c.emp_no)>=2 		
+		```
+## <21> GROUP BY란?
+- select 절에 있는 컬럼안의 중복 데이터를 [하나로 그룹] 지어 주는 역할을 한다.
+- 주로 그룹을 지어 통계를 낼때 사용한다.
+- GROUP BY 구문 문법은 간단하나 통계를 내는 과정에서 각종 함수가 때거지로 등장한다.
+	그러므로 GROUP BY 구문은 함수와의 싸움이다.    
 
+사용예시
+```
+select
+	jikup          "부서번호"
+	,sum(salary)    "급여합"
+	,avg(salary)    "평균급여"
+	,count(*)       "인원수"
+from
+	employee
+group by
+	jikup;
+```
+## <22> [인라인뷰(INLINE VIWE)]란?
+- FROM 절에 나오는 SELECT를 말한다.
+- FROM 절에는 [테이블명]이 나온다. 이 자리에 SELECT 나올 경우 SELECT 결과물을 테이블로 생각하면 된다.
+- 인라인뷰는 SELECT 결과물을 테이블로 취급하기 때문에 메모리에 부담을 준다.
+- 인라인 뷰안에 ROWNUM 컬럼이 있다면 바깥쪽 SELECT 입장에서 안쪽ROWNUM 컬럼은 단순한 일반 컬럼이 된다    
 
+사용예시
+```
+SELECT * FROM 
+	(SELECT ROWNUM RNUM,E.*FROM 
+	(SELECT *FROM EMPLOYEE ORDER BY SALARY DESC) E
+        WHERE ROWNUM<=10)
+WHERE
+	RNUM>=1;
+```
+### 인라인뷰을 사용한 페이징처리
+- SELECT의 결과물이 웹브라우저로 출력된다.
+- 만약 SELECT 결과물이 100,000 행이면 다 보여줄 경우 웹브라우저 로딩이 걸린다.
+- 그러므로 1~10행 또는 1~15행 씩 끊어서 웹브라우저로 출력되야 로딩이 걸리지 않는다.
+- 이렇게 SELECT 결과물에서 N행 씩 끊어서 화면에 보여주는 것은 [페이징] 처리라고한다 게시판 만들때 씀    
 
+사용예시
+```
+SELECT * FROM 
+	(SELECT ROWNUM RNUM,E.* FROM 
+	원하는 정렬 SELECT문
+        WHERE ROWNUM<=마지막행번호)
+WHERE
+	RNUM>=시작행번호;
+```
+## VIEW(뷰) 특징
+- 객체로써 저장된다. 즉 이름을 가지고 저장된다.
+- 뷰도 테이블이므로 SELECT 대상이 된다.
+- 뷰의 근원이 되는 실존 테이블의 데이터가 변경된 후 뷰가 실행되면 뷰에 그대로 반영된다.(=실존 테이블과 VIEW는 항상 동기화 된다.)
+- 뷰를 가지고 또 다른 뷰를 만들 수 있다.
+### VIEW(뷰) 를 사용하는 목적
+#### 1. #### 보안성 때문이다
+	- 보여주고 싶지 않은 컬럼을 제외하고 뷰를 만들어 안보이게 만들 수 있다.
+#### 2. join 등과 같은 길고 복잡한 select 문장을 뷰로 만들어 테이블처럼 사용되어 [편의성]을 제공한다.
+### EMPLOYEE_VW1를 생성
+```
+create view employee_vw1 as
+select 
+	emp_no,emp_name,dep_no,jikup,hire_date,jumin_num,phone_num,mgr_emp_no
+from
+	employee
+```
+## 뷰를 만드는 SQL문법
+### CREATE [OR REPLACE] [FORCE | NOFORCE] VIEW 뷰이름 AS SELECT문장 [WITH READ ONLY] [WITH CHECK OPTION];
+- #### OR REPLACE
+	- 동일한 뷰가 있으면 덮어쓴다. 즉 기존의 뷰가 갱신된다. 미사용 시 뷰 생성 불가능
+- #### FORCE
+	- 존재하지 않는 테이블로부터 뷰를 만들 경우라도 뷰를 만든다.
+	- FORCE에 의해 생성된 뷰를 SELECT로 검색하면 에러가 발생한다 즉 이름만 존재하고 검색이 불가능한 뷰가 된다.
+	- 뷰 생성 시 거론한 존재하지 않는 테이블을 나중에 만들고 나면 뷰도 SELECT로 검색이 가능하다.
+- #### NOFORCE
+	- 존재하지 않는 테이블에서 뷰를 만들 경우 뷰를 만들지 못한다.
+	- FORCE, NOFORCE 모두 생략 시 NOFORCE 설정과 같다.
+- #### WITH READ ONLY
+	- 뷰에 대해 입력, 수정, 삭제 작업이 불가능하다.
+	- 생략 시 특정 조건하에 하나의 테이블에서 만들어진 뷰에 대해서는 입력, 수정, 삭제 작업을 할 수 있고
+		실존 테이블에 입력, 수정, 삭제가 된다.
+- #### WITH CHECK OPTION
+	- 뷰의 WHERE 구문 조건에 위배되는 방향으로 INSERT, UPDATE 작업은 불가능하다.
+	- <예>뷰에 WHERE SALARY>=6000 이 있을 경우 SALARY>=6000 조건에 위배되는 방향으로 입력, 수정이 불가능하다.
+		예를 들어 SALARY >=6000 조건이 해당하는 행의 SALARY를 6000 미만으로 입력, 수정하는 행위는 불가능하다.
+- #### 생성한 뷰의 정보 검색 방법
+	- SELECT VIEW_NAME, TEXT FROM USER_VIEW;
+- #### SELECT 문에서 실존 테이블에 존재하지 않는 컬럼은 반드시 별칭을 써야한다.
+
+## 테이블 복제 하는 방법
+- create table employee2 as select * from employee;
+	- 위 SQL 구문은 select 결과물을 실존 테이블로 만드는 SQL 구문이다.
+	- 위 SQL 구문으로 테이블 복사하면 데이터, 자료형, 자료형크기, not null 제약 조건만 그대로 복사된다.
+	- <주의> not null 제약 조건 이외의 제약 조건은 따라오지 않는다.
+### 데이터를 제외하고 복제
+- create table employee3 as select * from employee where 1=2;
+	- where 조건절에 계속 false가 되는 조건을 걸면 컬럼명, 자료형, 자료형크기, not null 제약조건만 그대로 복사되고
+		데이터는 복사되지 않는다.
+#### <예> 부서별, 직급별로 [부서번호], [부서명], [직급], [평균연봉]을 출력하는 employee_vw3를 생성
+```
+ create view employee_vw3 as
+    select
+        d.dep_no "dep_no"
+        ,d.dep_name "dep_name"
+        ,e.jikup       "jikup"
+        ,avg(e.salary)  "avg_salary"
+    from
+        dept d, employee e
+    where
+        d.dep_no=e.dep_no
+    group by
+        d.dep_no,d.dep_name, e.jikup
+    order by
+        "dep_no", "avg_salary"  desc
+```
