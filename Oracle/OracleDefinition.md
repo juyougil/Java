@@ -561,7 +561,7 @@ SELECT * FROM
 WHERE
 	RNUM>=시작행번호;
 ```
-## <24> VIEW(뷰) 특징
+## <23> VIEW(뷰) 특징
 - 객체로써 저장된다. 즉 이름을 가지고 저장된다.
 - 뷰도 테이블이므로 SELECT 대상이 된다.
 - 뷰의 근원이 되는 실존 테이블의 데이터가 변경된 후 뷰가 실행되면 뷰에 그대로 반영된다.(=실존 테이블과 VIEW는 항상 동기화 된다.)
@@ -601,7 +601,7 @@ from
 	- SELECT VIEW_NAME, TEXT FROM USER_VIEW;
 - #### SELECT 문에서 실존 테이블에 존재하지 않는 컬럼은 반드시 별칭을 써야한다.
 
-## <25> 테이블 복제 하는 방법
+## <24> 테이블 복제 하는 방법
 - create table employee2 as select * from employee;
 	- 위 SQL 구문은 select 결과물을 실존 테이블로 만드는 SQL 구문이다.
 	- 위 SQL 구문으로 테이블 복사하면 데이터, 자료형, 자료형크기, not null 제약 조건만 그대로 복사된다.
