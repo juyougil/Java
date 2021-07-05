@@ -167,26 +167,35 @@
     	group by
         		e.dep_no
 ```
-#### <11> 
+#### <11> employee 테이블에서 직급순서대로 정렬하여 직급별로 [직급], [직급평균연봉], [인원수]를 검색하면? (높은 직급이 먼저 나와야함. )
 ```
-
+    	select
+        		jikup
+        		,trunc(avg(salary),3)
+        		,count(*)
+    	from
+        		employee
+    	group by
+        		jikup
+    	order by
+        		decode(jikup,'사장',1,'부장',2,'과장',3,'대리',4,5);
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#### <12> 부서별 [부서번호], [부서명], [직원수], [관리고객수]를 검색하면?
+```
+	---------------------
+	조인 그룹바이
+	---------------------
+	select
+        		d.dep_no
+        		,d.dep_name
+        		,count(distinct(e.emp_no)) --> 여기 distinct를 안쓰면 직원수가 중복되서 나온다.
+        		,count(c.emp_no) --> 여기 distinct를 쓰면 고객을 담당하는 직원수가 된다. 그러므로 쓰면 인된다.
+    	from
+        		dept d, employee e, customer c
+    	where
+        		d.dep_no=e.dep_no(+) and e.emp_no=c.emp_no(+)
+    	group by
+        		d.dep_no,d.dep_name;
+	---------------------------------------------------------
+	조인전에 where 행을거르는 조건 먼저
+```
