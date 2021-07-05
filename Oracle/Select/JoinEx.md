@@ -503,4 +503,29 @@
     	order by c.cus_no;
 ```
 
-#### <17> 
+#### <17> 퇴직일이 60세 라는 기준 하에 아래 처럼 출력하면? [직원번호], [직원명], [근무년차], [퇴직일까지 남은 년도], [생일(년-월-일 요일명)],[소속부서명], [직속상관명], [직속상관부서명] 단 모든 직원 다 나오고, 직급 높으면 먼저 나오고 직급이 같으면 나이가 많은 사람이 나와야 함.
+```
+    	select
+        		e1.emp_no
+        		,e1.emp_name
+        		,ceil((sysdate-e1.hire_date)/365)||'년차' "근무년차"
+        		,60-(to_number(
+               		 to_char(sysdate,'YYYY')
+               		 )-
+       		 to_number(
+          			  case
+			        substr(e1.jumin_num,7,1)
+			        when '1' then '19'
+			        when '2' then '19'
+			        else '20'end||substr(e1.jumin_num,1,2))+1)||'년도'  "퇴직일까지 남은 년도"
+        		,case when sysdate-to_date(extract(year from sysdate)||substr(e1.jumin_num,3,4),'YYYYMMDD') > 0
+        		then to_char(to_date(extract(year from sysdate)+1||substr(e1.jumin_num,3,4),'YYYYMMDD'),'YYYY-MM-DD')
+        		else to_char(to_date(extract(year from sysdate)||substr(e1.jumin_num,3,4),'YYYYMMDD'),'YYYY-MM-DD') end  "생일(년-월-일 요일명)"
+        		,e2.emp_name
+        		,d.dep_name
+   	 from
+        		(employee e1 left outer join employee e2 on e1.mgr_emp_no=e2.emp_no) left outer join dept d on e2.dep_no=d.dep_no
+    	order by
+        		decode(e1.jikup,'사장','1','부장','2','과장' ,'3','대리','4','5' ) asc
+        		,decode(substr(e1.jumin_num,7,1),'1','19','2','19','20')||substr(e1.jumin_num,1,6) asc ;
+```
