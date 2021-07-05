@@ -118,7 +118,29 @@ select * from employee where salary >= (select avg(salary) from employee);
 		e.dep_no= d.dep_no and salary = (select max(salary) from employee)
 ```
 ### 상관 쿼리
-#### <8> 담당 고객이 2명 이상인 [직원번호], [직원명], [직급]을 검색하면?
+#### <8> 10번 부서 직원들이 관리하는 [고객번호], [고객명],[직원번호]를 검색하면? 상관 쿼리
+```
+    	select
+		c.cus_no
+		,c.cus_name
+		,c.emp_no
+	from
+		customer c
+	where
+        (select e.dep_no from employee e where c.emp_no = e.emp_no) = 10       
+	------
+    	select
+		c.cus_no
+		,c.cus_name
+		,c.emp_no
+	from
+		customer c
+	where
+        (select count(*) from employee e where c.emp_no = e.emp_no and e.dep_no = 10)>0     
+```
+
+
+#### <9> 담당 고객이 2명 이상인 [직원번호], [직원명], [직급]을 검색하면?
 ```
     	select
         	e.emp_no
@@ -133,7 +155,7 @@ select * from employee where salary >= (select avg(salary) from employee);
 	where에서 ture면 출력
 ```
 
-#### <9> [직원번호], [직원명], [소속부서명]을 검색하면?
+#### <10> [직원번호], [직원명], [소속부서명]을 검색하면?
 ```
 	--------------------
 	조인
@@ -156,7 +178,7 @@ select * from employee where salary >= (select avg(salary) from employee);
 	from
 		employee e;
 ```
-#### <10> [직원번호], [직원명], [담당고객수]을 검색하면?
+#### <11> [직원번호], [직원명], [담당고객수]을 검색하면?
 ```
     select
         e.emp_no
@@ -165,7 +187,7 @@ select * from employee where salary >= (select avg(salary) from employee);
     from
         employee e
 ```
-#### <11> 아래 처럼 [부서명], [부서직원수], [부서담당고객수]을 검색하면?
+#### <12> 아래 처럼 [부서명], [부서직원수], [부서담당고객수]을 검색하면?
 ```
     select
         d.dep_name
@@ -174,7 +196,7 @@ select * from employee where salary >= (select avg(salary) from employee);
     from
         dept d	
 ```
-#### <12> 고객번호, 고객명, 고객전화번호, 담당직원명, 담당직원직급, 부서번호를 출력하면? <조건> 담당직원이 없는 고객도 포함 단 조인을 사용하지 말고 서브쿼리를 사용하십시오
+#### <13> 고객번호, 고객명, 고객전화번호, 담당직원명, 담당직원직급, 부서번호를 출력하면? <조건> 담당직원이 없는 고객도 포함 단 조인을 사용하지 말고 서브쿼리를 사용하십시오
 ```
 	서브쿼리
 	---------------
@@ -216,7 +238,7 @@ select * from employee where salary >= (select avg(salary) from employee);
         		customer c left outer join employee e on c.emp_no=e.emp_no    
 ```
 
-#### <13> 고객번호, 고객명, 고객전화번호, 담당직원명, 담당직원직급, 부서번호를 출력하면? <조건> 고객정보는 모두 보이고 직원번호는 10번 부서만 보일것	단 조인을 사용하지 말고 서브쿼리를 사용하십시오
+#### <14> 고객번호, 고객명, 고객전화번호, 담당직원명, 담당직원직급, 부서번호를 출력하면? <조건> 고객정보는 모두 보이고 직원번호는 10번 부서만 보일것	단 조인을 사용하지 말고 서브쿼리를 사용하십시오
 ```
 	서브쿼리
 	---------------
@@ -259,7 +281,7 @@ select * from employee where salary >= (select avg(salary) from employee);
         		customer c left outer join employee e on c.emp_no=e.emp_no and e.dep_no= 10
 ```
 
-#### <14>  
+
 
 
 
