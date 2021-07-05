@@ -438,7 +438,7 @@ select sum(salary) from employee;
 - to_date (문자형날짜 컬럼,출력시 월하는 날짜 패턴)
 	- 문자형날짜를 날짜데이터로 변환하는 변환 함수
 
-## <20> case ~ end 와 decode
+## <21> case ~ end 와 decode
 ```
 오라클 조건문 case(),decode()
 
@@ -479,7 +479,7 @@ decode(~) 구문의 패턴 설명
 	decode 단점 => 같다라는 경우에 만 사용된다.
 			=>오라클에서만 사용되는 전용함수이다. case ~ end 구문은 모든 DB에서 사용가능
 ```
-## <21> 기타 문법, 내장 함수
+## <22> 기타 문법, 내장 함수
 - distinct
 	- 컬럼안의 데이터 중복을 제거
 	```
@@ -493,7 +493,7 @@ decode(~) 구문의 패턴 설명
 - nvl2(컬럼명,null값이 아닐때 대체데이터, null일때 대체 데이터)
 	- null이 아니면 null값아닐때 대체데이터 리턴 null이면 null값일때 대체데이터를 리턴하는 [null 처리 내장함수]	
 
-## <22> 문자패턴검색
+## <23> 문자패턴검색
 - where 컬럼명 like '패턴문자열' => 컬럼명 안의 데이터가 패턴문자열을 갖고 있으면 그 행을 검색하라
 	- <예> select * from employee where emp_name like '김%';
 		- 김이 첫글자고 두번째는 무엇이 와도 좋고 길이에 제한없는 문자패턴을 골라라
@@ -502,7 +502,7 @@ decode(~) 구문의 패턴 설명
 		- 김으로 끝나는 문자패턴을 골라라.
 	- <예> select * from employee where emp_name like '%김%';
 		- 김이 들어간 문자패턴을 골라라.
-## <23> alias(알리알스)
+## <24> alias(알리알스)
 - 컬럼명 뒤에 as "원하는이름" (알리오스) " "는 알리알스에서만 씀
 - 이름에 공백을 넣으려면 ""는 생략 불가능
 - <참고>as 생략이 가능하다.
@@ -511,7 +511,7 @@ decode(~) 구문의 패턴 설명
 - <참고>오라클에서 연결 연산자는 + 가 아니라 || 이다. 자바와 다르다.
 - <참고>"는 alias(알리알스)같은 테이블에 들어가는 데이터가 아닌 문자에 씀
 
-## <24> Join이란?
+## <25> Join이란?
 - 2개 이상의 테이블로 부터 컬럼을 복사해서 횡으로 붙이는 작업을 말한다.
 - join은 서로다른 테이블의 행을 붙여 유저가 보기 쉽게 만듬
 - inner join과 outer join의 조건이 같다면 결과는 같을 수 있다.
@@ -591,7 +591,7 @@ decode(~) 구문의 패턴 설명
 - #### 오라클 조인
 	- 오라클에서만 사용되는 조인이다.
 
-## <25> union, union all 이란?
+## <26> union, union all 이란?
 - 서로 다른 테이블의 컬럼을 종으로 붙이는 작업을 말한다.
 - union는 중복제거, union all 중복허용이다.    
 
@@ -605,7 +605,7 @@ select cus_name|| '고객', tel_num from customer;
 - 컬럼의 개수가 일치해야한다.
 - 붙는 컬럼의 자료형이 일치해야한다.
 
-## <26> subquery(서브쿼리)란?
+## <27> subquery(서브쿼리)란?
 - select, insert, update, delete 구문 안에 들어 있는 또 다른 select 문을 말한다.
 - <주의> from 절에 나오는 select는 서브쿼리가 아니라 inline(인라인뷰)라고 부른다.
 
@@ -633,7 +633,7 @@ select cus_name|| '고객', tel_num from customer;
 			employee e
 		where (select count(*) from customer c where e.emp_no =c.emp_no)>=2 		
 		```
-## <27> GROUP BY란?
+## <28> GROUP BY란?
 - select 절에 있는 컬럼안의 중복 데이터를 [하나로 그룹] 지어 주는 역할을 한다.
 - 주로 그룹을 지어 통계를 낼때 사용한다.
 - GROUP BY 구문 문법은 간단하나 통계를 내는 과정에서 각종 함수가 때거지로 등장한다.
@@ -652,7 +652,7 @@ from
 group by
 	jikup;
 ```
-## <28> [인라인뷰(INLINE VIWE)]란?
+## <29> [인라인뷰(INLINE VIWE)]란?
 - FROM 절에 나오는 SELECT를 말한다.
 - FROM 절에는 [테이블명]이 나온다. 이 자리에 SELECT 나올 경우 SELECT 결과물을 테이블로 생각하면 된다.
 - 인라인뷰는 SELECT 결과물을 테이블로 취급하기 때문에 메모리에 부담을 준다.
@@ -682,7 +682,7 @@ SELECT * FROM
 WHERE
 	RNUM>=시작행번호;
 ```
-## <29> VIEW(뷰) 특징
+## <30> VIEW(뷰) 특징
 - 객체로써 저장된다. 즉 이름을 가지고 저장된다.
 - 뷰도 테이블이므로 SELECT 대상이 된다.
 - 뷰의 근원이 되는 실존 테이블의 데이터가 변경된 후 뷰가 실행되면 뷰에 그대로 반영된다.(=실존 테이블과 VIEW는 항상 동기화 된다.)
@@ -722,7 +722,7 @@ from
 	- SELECT VIEW_NAME, TEXT FROM USER_VIEW;
 - #### SELECT 문에서 실존 테이블에 존재하지 않는 컬럼은 반드시 별칭을 써야한다.
 
-## <30> 테이블 복제 하는 방법
+## <31> 테이블 복제 하는 방법
 - create table employee2 as select * from employee;
 	- 위 SQL 구문은 select 결과물을 실존 테이블로 만드는 SQL 구문이다.
 	- 위 SQL 구문으로 테이블 복사하면 데이터, 자료형, 자료형크기, not null 제약 조건만 그대로 복사된다.
