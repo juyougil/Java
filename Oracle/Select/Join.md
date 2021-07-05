@@ -71,7 +71,7 @@
 		e.dep_no=d.dep_no;	
 ```
 
-#### <4> 고객명, 고객전화번호, 담당직원명, 담당직원직급을 출력하면? <조건>담당직원이 있는 고객만 출력<inner join>
+#### <4> 고객명, 고객전화번호, 담당직원명, 담당직원직급을 출력하면? <조건>담당직원이 있는 고객만 출력 inner join
 ```
 	<주의> 담당직원이 있는 고객만 나와야하므로, 즉 조건에 맞는 행만 나와야하므로 inner 조인이다.
 	조인가능한 테이블에 갯수를 물어본다면 갯수는 상관없음 실력과는 관계없음 (입)
@@ -313,8 +313,60 @@
          		inner join customer c on e1.emp_no = c.emp_no);
 
 ```
+#### <11> 고객번호 고객명, 고객주민번호 출력하라. 단 연봉이 3000 이상인 담당직원이 담당한 고객 이어야한다.
+```
+    	select
+       		c.cus_no
+        		,c.cus_name
+        		,c.jumin_num
+   	from
+        		customer c, employee e
+    	where c.emp_no = e.emp_no and e.salary >= 3000; 
+```
+
+#### <12> 고객번호 고객명, 고객주민번호 출력하라. 단 40살 이상인 담당직원이 담당한 고객 이어야한다.
+```
+    	select
+        		c.cus_no
+        		,c.cus_name
+        		,c.jumin_num
+    	from
+        		customer c, employee e
+    	where c.emp_no = e.emp_no and ((to_number(to_char(sysdate,'YYYY'))
+                                    -to_number(decode(substr(e.jumin_num,7,1),'1','19','2','19','20')
+                                    ||substr(e.jumin_num,1,2)))+1) >= 40
+    	order by c.cus_no;
+	---------------------------------
+	select
+        		c.cus_no
+        		,c.cus_name
+        		,c.jumin_num
+    	from
+        		customer c inner join employee e
+    	on c.emp_no = e.emp_no and (extract(year from sysdate)
+                                    -extract(year from to_date(decode(substr(e.jumin_num,7,1),'1','19','2','19','20')
+                                    ||substr(e.jumin_num,1,6),'YYYYMMDD'))+1) >= 40
+    	order by c.cus_no;
+	-------------------------------------------------------------------
+	<주의>코딩 상 분명히 조인 이지만 출력되는 컬럼은 한개의 테이블에서  나오는 컬럼들이다
+		위 코딩은 조인이 출력 목적이 아닌 조건 목적으로 사용된 것이다.
+	-------------------------------------------------------------------
+	새끼 문제: 10부서 또는 30번 부서 직원이 담당하는 고객을 검색하면?
+	-------------------------------------------------------------------
+    	select
+        		c.cus_no
+        		,c.cus_name
+    	from
+        		customer c, employee e
+    	where
+        		c.emp_no = e.emp_no and e.dep_no in(10,30)
+	------------------------------------------------------------
+	행을 골라내는 조건으로 join을 사용
+```
+
 ### outer join
-#### <12> 고객명, 고객전화번호, 담당직원명, 담당직원직급을 출력하면? <조건>담당직원이 없는 고객도 포함
+
+#### <13> 고객명, 고객전화번호, 담당직원명, 담당직원직급을 출력하면? <조건>담당직원이 없는 고객도 포함
 ```
     	select
         		c.cus_name  고객명
@@ -331,3 +383,124 @@
 		(+)가 붙은 e.emp_no 컬럼의 소속 테이블 행은 조건에 맞는 게 없으면 null 이라도 달고 나오라는 뜻
 		c.emp_no = e.emp_no(+)
 ```
+
+#### <14> 고객번호 고객명, 고객전화번호, 담당직원명, 담당직원직급을 출력하면? <조건>고객정보는 모두 보이고 직원정보는 10번 부서만 보일것
+```
+    	select
+        		c.cus_name  고객명
+        		,c.tel_num  고객전화번호
+        		,e.emp_name 담당직원명
+        		,e.jikup    담당직원직급
+    	from
+        		customer c, employee e
+    	where
+       		c.emp_no=e.emp_no(+) and e.dep_no(+) = 10;
+	-------------------------------------------------------------
+	<주의> outer 조인에서 where 에 (+)가 붙는 놈은?
+	-------------------------------------------------------------
+		다나오는 메인 테이블에 딸려 나오는 즉 메인 테이블이 아닌 컬럼에 붙는다.
+		심지어 행을 골라내는 조건의 컬럼도 여기에 속한다.
+	-------------------------------------------------------------
+	<세끼문제>만약 e.dep_no(+) =10 을 e.dep_no = 10로 수정하면?
+	-------------------------------------------------------------------
+		담당직원이 10번 부서인 고객만 포함된다.
+		마치 inner 조인의 결과 처럼 보인다.
+	*********************************************************
+	ANSI조인
+	*********************************************************
+    	select
+        		c.cus_name  고객명
+        		,c.tel_num  고객전화번호
+        		,e.emp_name 담당직원명
+        		,e.jikup    담당직원직급
+    	from
+        		customer c left outer join employee e
+    	on
+       		c.emp_no=e.emp_no and e.dep_no = 10;
+	------------------------------------------------------
+	<주의> ANSI조인에서 left outer join 나오면 left outer join 왼쪽에 있는 테이블이 다 나오는 테이블이다.
+	<주의> ANSI조인에서 right outer join 나오면 right outer join 오른쪽에 있는 테이블이 다 나오는 테이블이다.
+
+	-------------------------------------------------------------------
+	<세끼문제>만약 e.dep_no(+) =10 를 따로 빼내서 where e.dep_no = 10로 추가 하면?
+	-------------------------------------------------------------------
+		where 절이 있으면 행을 골라내므로 고객이 2명만 나온다.
+		ANSI 방식의  outer 조인에서는 행을 골라내는 조건도 on절에 들어가야한다. 
+```
+
+#### <15> 고객번호 고객명, 고객전화번호, 담당직원명, 담당직원직급, 담당직원연봉등급을 출력하면? <조건>담당직원이 없는 고객도 포함.
+```
+     	select
+        		c.cus_name  고객명
+        		,c.tel_num  고객전화번호
+        		,e.emp_name 담당직원명
+        		,e.jikup    담당직원직급
+        		,s.sal_grade_no 담당직원연봉등급
+    	from
+       		customer c, employee e, salary_grade s
+    	where
+       		c.emp_no=e.emp_no(+) and e.salary between s.min_salary(+) and s.max_salary(+)
+    	order by c.cus_no asc;
+	----------------------------------------- 
+	<주의> employee 테이블 입장에서는 메인 테이블은 customer 이고, salary_grade 테이블 입장에서 메인 테이블은 employee 이다
+		메인에 딸려 나오는 테이블의 컬럼에 (+)을 붙이면 된다.
+	---------------------------------------------
+	<주의> 아래 처럼은 안된다.
+		s.min_salary(+) <= e.salary(+) and s.man_salary(+) >=e.salary(+)
+		      
+	----------------------------------------------     
+	ANSI 조인
+     	select
+        		c.cus_name  고객명
+        		,c.tel_num  고객전화번호
+        		,e.emp_name 담당직원명
+        		,e.jikup    담당직원직급
+        		,s.sal_grade_no 담당직원연봉등급
+   	from
+        		(customer c left outer join employee e on c.emp_no=e.emp_no) left outer join salary_grade s on e.salary between s.min_salary and s.max_salary
+```
+
+#### <16> 고객번호 고객명, 담당직원번호, 담당직원명, 담당직원소속부서명, 담당직원연봉등급 담당직원직속상관명, 담당직원직속상관직급, 직속상관연봉등급 출력하라. 단, 고객은 다 나와야하고 null은 없음으로 표시 아우터 조인 대표 문제
+```
+    	select
+        		c.cus_no            "고객번호"
+        		,c.cus_name         "고객명"
+        		,nvl(c.emp_no||'','없음')           "담당직원번호"
+        		,nvl(e1.emp_name,'없음')        "담당직원명"
+        		,nvl(d.dep_name,'없음')        "담당직원소속부서명"
+        		,nvl(s1.sal_grade_no||'','없음')       "담당직원연봉등급"
+        		,nvl(e2.emp_name,'없음')        "담당직원직속상관명"
+        		,nvl(e2.jikup,'없음')           "담당직원직속상관직급"
+        		,nvl(d.dep_name,'없음')        "직속상관소속부서명"
+        		,nvl(s2.sal_grade_no||'','없음') "직속상관연봉등급"
+    	from
+       		customer c, employee e1,employee e2, dept d,salary_grade s1, salary_grade s2
+   	where
+        		c.emp_no = e1.emp_no(+)
+        		and e1.mgr_emp_no = e2.emp_no(+)
+        		and e1.dep_no=d.dep_no(+)
+        		and e1.salary between s1.min_salary(+) and s1.max_salary(+)
+        		and e2.salary between s2.min_salary(+) and s2.max_salary(+)
+    	order by c.cus_no;
+
+	---------------------------------------------------------------------------------------
+    	select
+        		c.cus_no            "고객번호"
+        		,c.cus_name         "고객명"
+        		,nvl(c.emp_no||'','없음')           "담당직원번호"
+        		,nvl(e1.emp_name,'없음')        "담당직원명"
+        		,nvl(d.dep_name,'없음')        "담당직원소속부서명"
+        		,nvl(s1.sal_grade_no||'','없음')       "담당직원연봉등급"
+        		,nvl(e2.emp_name,'없음')        "담당직원직속상관명"
+        		,nvl(e2.jikup,'없음')           "담당직원직속상관직급"
+        		,nvl(d.dep_name,'없음')        "직속상관소속부서명"
+        		,nvl(s2.sal_grade_no||'','없음') "직속상관연봉등급"
+    	from
+        		((((((customer c left outer join employee e1 on c.emp_no = e1.emp_no)
+        		left outer join dept d on e1.dep_no = d.dep_no) left outer join salary_grade s1 on e1.salary between s1.min_salary and s1.max_salary)
+        		left outer join employee e2 on e1.mgr_emp_no = e2.emp_no)
+        		left outer join salary_grade s2 on e2.salary between s2.min_salary and s2.max_salary)
+    	order by c.cus_no;
+```
+
+#### <17> 
