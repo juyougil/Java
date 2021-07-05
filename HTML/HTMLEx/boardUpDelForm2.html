@@ -1,0 +1,46 @@
+<html>
+<meta charset="UTF-8">
+<head>
+	<title></title>
+</head>
+
+
+<body>
+    <center>
+        <form>
+        [글 수정 / 삭제]<br>
+        <table border = 1 style = "border-collapse:collapse" cellpadding = 5>
+            <tr>
+                <th bgcolor="lightgray">이름</th>
+                <td><input type="text" name="writer" size="10" maxlength="3" value="사오정"></td>
+            </tr>
+            <tr>
+                <th bgcolor="lightgray">제목</th>
+                <td><input type="text" name="subject" size="48" maxlength="20" value="경제 침체의 원인"></td>
+            </tr>
+            <tr>
+                <th bgcolor="lightgray">Email</th>
+                <td><input type="email" name="email" size="48" maxlength="20" value="b@naver.com"></td>
+            </tr>
+            <tr>
+                <th bgcolor="lightgray">내용</th>
+                <td><textarea name="content" cols="50" rows="20">어쩌구 저쩌구</textarea> </td>
+            </tr>
+            <tr>
+                <th bgcolor="lightgray">비밀번호</th>
+                <td><input type="password" name="pwd" size="10" maxlength="4"></td>
+            </tr>
+        </table>
+        <table><tr><td height = 3></td></tr></table>
+        <input type="button" value="수정"> 
+        <input type="button" value="삭제"> 
+        <input type="reset" value="초기화"> 
+        <input type="button" value="전체 글 보기" onclick="location.replace('boardList.html')">
+        
+        </form>
+    </center>
+
+</body>
+
+
+</html>
