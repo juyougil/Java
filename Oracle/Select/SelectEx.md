@@ -1165,3 +1165,12 @@ select * from employee where emp_name not like '김%';
     	jumin_num like '6_____1%' 
 	or jumin_num like '7_____1%'
 ```
+#### <74> [직원명], [입사일] (년-월-일 ~/4분기 한글 1자리요일), [퇴직일](년-월-일) 출력하면?  <조건> 퇴직일은 입사 후 20년 5개월 10일 후
+```
+    	select
+        		emp_name
+        		,to_char(hire_date,'YYYY-MM-DD Q"분기" (DY)','nls_date_language = Korean')  "입사일"
+        		,to_char(add_months(hire_date,245)+10,'YYYY-MM-DD Q"분기" (DY)','nls_date_language = Korean') "퇴사일"
+    	from
+       		employee
+```
