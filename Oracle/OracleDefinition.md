@@ -323,8 +323,47 @@ customer||||
 	- 자리수는 n1>0(양수) 경우 왼쪽부터, n1<0(음수) 경우 오른쪽부터 샘한다.
 - trim(s)
 	- 문자열 s의 맨좌우측의 공백을 제거하여 리턴한다.
-		제거 후 또 있으면 계속 제거 후 리턴한다. 
-		
+		제거 후 또 있으면 계속 제거 후 리턴한다.
+	
+- replace( s1, s2, s3 )
+	- 문자열 s1에서 s2를 s3로 수정해서 리턴한다.
+	- <예>
+	```
+	select replace( 'You are not alone', 'You', 'We' ) from dual;
+	select replace( 'You are not alone', 'not' ) from dual;      not이 없어짐
+	select translate( 'You are not alone', 'You', 'We' ) from dual; 대응되는 문자를 바꿈 y -> w o-> e
+	```
+- initcap( s )
+	- 문자열 s에서 각 단어의 첫 문자만 대문자로 변환하고 나머지는
+		모두 소문자로 리턴한다.
+	```
+	select  initcap( 'abc def' ) from dual;
+	```
+- lpad( s1, n, s2 )
+	- n 자리 만큼 확보하고 s1을 오른쪽 정렬 후 왼쪽에 생긴 빈 공백에
+	  	문자열 s2를 채워 리턴한다.
+	```
+	select lpad( 'abc', 7, ' ' ) from dual;
+	```
+- rpad( s1, n, s2 )
+	- n 자리 만큼 확보하고 s1을 오른쪽 정렬 후 왼쪽에 생긴 빈 공백에
+	  	문자열 s2를 채워 리턴한다.
+	```
+	select lpad( 'abc', 7, ' ' ) from dual;
+	```
+- instr( s1, s2, n1, n2 )
+	- ( s1:타겟문자, s2:찾을문자, 에서 n1:검색시작위치, n2:몇번째 )
+	- <주의>오라클에서 위치를 따질 때 시작은 0이 아니라 1이다.
+	- 문자열 s1 에서 문자열 s2 가 있는 위치 반환. (자바의 indexOf(~) 와 비슷한 기능)
+	```
+	select
+		instr( 'Every Sha-la-la-la Every wo-o-wo-o', 'la' ),
+		instr( 'Every Sha-la-la-la Every wo-o-wo-o', 'la', 1),
+		instr( 'Every Sha-la-la-la Every wo-o-wo-o', 'la', 1, 2),
+		instr( 'Every Sha-la-la-la Every wo-o-wo-o', 'la', 12, 2)
+	from dual;
+	```
+	
 ## <16> 날짜 함수 (리턴값의 자료형을 조심)
 - months_between(날짜1,날짜2)
 	- 날짜1과 날짜2의 차이를 [개월수]로 리턴
@@ -342,7 +381,15 @@ customer||||
 - 날짜-정수
 	- 날짜에다 정수만큼의 일수를 뺀 만큼의 날의 날짜를 리턴하기
 
-##
+## <17> 문자패턴검색
+- where 컬럼명 like '패턴문자열' => 컬럼명 안의 데이터가 패턴문자열을 갖고 있으면 그 행을 검색하라
+	- <예> select * from employee where emp_name like '김%';
+		- 김이 첫글자고 두번째는 무엇이 와도 좋고 길이에 제한없는 문자패턴을 골라라
+		- 문자패턴 안의 % 는 무엇이 와도 좋고 길이에 제한없음의 의미이다. 
+	- <예> select * from employee where emp_name like '%김';
+		-김으로 끝나는 문자패턴을 골라라.
+	- <예> select * from employee where emp_name like '%김%';
+		- 김이 들어간 문자패턴을 골라라.
 
 	
 
