@@ -52,7 +52,7 @@
     Adobe Flash & Adobe Flex    -> ActionScript
 ```
 
-### <5> Javascript 는 HTML 안에서 어디에 삽입됩니까?
+### <6> Javascript 는 HTML 안에서 어디에 삽입됩니까?
 ```
 	아래처럼 script 태그 안에 삽입된다.
 	----------------------
