@@ -3,6 +3,6 @@
 #### 2. [오라클](Oracle/OracleDefinition.md)   
 - [테이블 만들기](Oracle/Table/CreateTable.md)
 - [뷰 만들기](Oracle/Table/CreateView.md)
-- [Update,insert](Oracle/Table/insert_update.md.md)
+- [Update,insert](Oracle/Table/insert_update.md)
 #### 3. [HTML](HTML/HTML.md)    
 #### 4. [자스](Javascript/Javascript.md)
