@@ -1,0 +1,116 @@
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script src="jquery-1.11.0.min.js"></script>
+	<script>
+
+		/*$(document).ready(function() {
+			//내가 한것
+			/*var trCnt = $(".dogList").find("tr");
+			trCnt.eq(0).prepend("<th bgcolor=gray>번호</th>")
+			var trCnts =trCnt.length;
+			var j=0
+			for(var i=1; i<trCnts; i++){
+				j++
+				trCnt.eq(i).prepend("<td align=center>"+(trCnts-j)+"</td>");
+			}*/
+		
+			/* 정순
+			for(var i=1; i<trCnt.length; i++){
+				trCnt.eq(i).prepend("<td align=center>"+i+"</td>");
+			}
+
+
+			/* 강사님 버전
+			// 변수 obj 선언하고 class="dogList" 를 가진 태그를 관리하는
+			// JQuery 객체를 생성하고 객체의 메위주를 obj 에 저장하기
+			var tableobj = $(".dogList")
+			var trObj = tableobj.find("tr")
+
+			trObj.each(function(i){
+				// 각 tr 태그의 첫재 자식으로 <tr> 번호 또는 <td> 일련번호호 삽입하기
+				//----------------------------------------------------
+				// 변수 thisObj 선언하고 i 번째 tr 태그를 관리하는
+				// JQuery 객체를 생성하고 객체의 메위주 저장하기
+				//----------------------------------------------------
+				var thisObj = $(this);
+				// 익명함수의 매개변수 i 가 0 이면
+				if(i==0){
+					// i 번째 tr 태그 안의 첫째 자식으로 <th>번호 를 삽입하기
+					thisObj.prepend("<th bgcolor=gray>번호")
+					//thisObj.append("<th bgcolor=gray>번호")
+				}
+				// 익명함수의 매개변수 i 가 0 이 아니면
+				else{
+					// i 번째 tr 태그 안의 첫째 자식으로 <td>i변수값 을 삽입하기
+					thisObj.prepend("<td>" + i);
+					//thisObj.append("<td>" + i);
+				}
+			})
+		});*/
+
+
+
+
+
+
+
+
+
+		//MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+		// i 를 사용하지 않고 번호 부여
+		/*$(document).ready(function() {
+			var tableObj = $(".dogList");
+			var trObj = tableObj.find("tr");
+			var no =1;
+			trObj.each( 
+					function(i){
+						var thisObj = $(this);
+						if(i==0){
+							thisObj.prepend("<th>번호")
+						}
+						else{
+							// 증감연산자로 1씩 증가시켜 넣기
+							thisObj.prepend("<td>" + no++ )
+						}
+					}
+			);
+		});*/
+
+		// i 를 사용하지 않고 역순 구하기
+		$(document).ready(function() {
+			var tableObj = $(".dogList");
+			var trObj = tableObj.find("tr");
+			//tr태그 개수의 1을 빼서 no 변수에 저장 1을 빼는 이유는 번호 tr 부분을 제외하기 위함
+			var no =trObj.length-1;
+			trObj.each( 
+					function(i){
+						var thisObj = $(this);
+						if(i==0){
+							thisObj.prepend("<th>번호")
+						}
+						else{
+							// 증감연산자로 1씩 줄여 넣기
+							thisObj.prepend("<td>" + no-- )
+						}
+					}
+			);
+		});
+
+
+	</script>
+	
+</head>
+
+<body><center>
+	<table class="dogList" border=1  cellpadding=4 style="border-collapse:collapse">
+		<tr><th bgcolor="gray">개이름
+		<tr><td>진도개
+		<tr><td>셰퍼드
+		<tr><td>비글
+		<tr><td>삽살개
+		<tr><td>풍산개
+	</table>
+</body>
+</html>

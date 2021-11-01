@@ -1,0 +1,170 @@
+<html>
+<meta charset="UTF-8">
+<head>
+	<title>로그인화면</title>
+	<!-------------------------------------------------------->
+	<!-- common_func.js 파일안의 자스코딩을 수입해서 script 태그 안에 삽입하기 .-->
+	<!-- jquery-1.6.2.min.js 파일안의 자스코딩을 수입해서 script 태그 안에 삽입하기 .-->
+	<!-------------------------------------------------------->
+	<script src="common_func.js"></script>
+	<script src="jquery-1.11.0.min.js" type="text/javascript"></script>
+
+	<!-------------------------------------------------------->
+	<!-- script 태그 선언. script 태그는 자바스크립트 세상이다.-->
+	<!-------------------------------------------------------->
+	<script>
+		//--------------------------
+		// 유저가 입력한 아이디와 암호의 유효성을 체크할 checkForm 함수 선언
+		//--------------------------
+		function checkForm(){
+			// 변수 uid 선언. 입력한 아이디를 얻어서 변수 uid 에 저장하기
+			// class=uid 를 가진 태그를 관리하는 JQuery 객체 생성하고 val() 메소드 호출로
+			// 웹브라우저 상에 입력한 아이디를 가져와 리턴하기
+			var uid = $(".uid").val();
+			// 변수 pwd 선언. 입력한 암호를 얻어서 변수 pwd 에 저장하기
+			// class=pwd 를 가진 태그를 관리하는 JQuery 객체 생성하고 val() 메소드 호출로
+			// 웹브라우저 상에 입력한 암호를 가져와 리턴하기
+			var pwd = $(".pwd").val();
+			
+			//만약에 유저가 입력한 아이디가 비어있으면 공백으로 이루어져 있으면
+			//isEmpty 함수 호출하여  ture를 리턴받으면, 즉 비어있거나 공백으로 이루어져 있으면
+			if(isEmpty(uid)) {
+				// 경고상자 띄우기
+				alert("아이디가 비어 있음. 입력 바람")
+				// 함수 중단하기. 이후 코딩은 실행되지 않는다.
+				return;	
+			}
+			// 만약에 유저가 입력한 암호가 암호가 비어있으면 공백으로 이루어져 있으면
+			if(isEmpty(pwd)){
+				// 경고상자 띄우기
+				alert("암호가 비어 있음. 입력 바람")
+				// 함수 중단하기
+				return;	
+			}
+			//만약에 아이디가 "abc"이고 암호가 123이면
+			if(uid=="abc"&&pwd=="123"){
+				if(confirm("로그인할까요?")){
+					// form 태그의 설정한 서버쪽 URL 주소로 접근하기
+					// 즉 새로운 페이지 만들기
+					document.loginForm.submit();
+				}
+			}else {
+				alert("아이디 또는 암호가 틀렸음! 재입력 바람!");
+				//아이디 입력란 비우기
+				// class=uid 를 가진 태그를 관리하는 JQuery 객체 생성하고 val() 메소드 호출로
+				// 웹브라우저 상에 아이디 입력란에 "" 삽입하기
+				$(".uid").val("");
+				//암호 입력란 비우기
+				// class=pwd 를 가진 태그를 관리하는 JQuery 객체 생성하고 val() 메소드 호출로
+				// 웹브라우저 상에 암호 입력란에 "" 삽입하기
+				$(".pwd").val("");
+			}
+		}
+
+		// body 태그 안의 모든 태그를 읽어들인 이후 실행할 코드를 설정하기
+		$(document).ready(
+			function(){
+
+				// 로그인 버튼을 클릭하면 checkForm 함수가 호출되도록 하기기
+				// class=login_btn 를 가진 태그를 관리하는 JQuery 객체를 생성해서
+				// JQuery 객체의 click(~) 메소드를 호출하여
+				// JQuery 객체가 관리하는 태그를 클릭하면 매개변수로 던져준 익명함수 호출하기
+				$(".login_btn").click(function(){
+					checkForm()
+				});
+
+				//회원가입 글씨를 클릭하면 회원가입 화면(=memberRegForm.html)열기
+				// class=regMember_btn 를 가진 태그를 관리하는 JQuery 객체를 생성해서
+				// JQuery 객체의 click(~) 메소드를 호출하여
+				// JQuery 객체가 관리하는 태그를 클릭하면 매개변수로 던져준 익명함수 호출하기
+				$(".regMember_btn").click(function(){
+					// 회원가입 화면(=memberRegForm.html) 열기
+					location.replace("memberRegForm.html")
+					
+				});
+
+		});
+
+
+
+
+
+
+
+
+
+	</script>
+
+</head>
+
+<body>
+<center><br><br><br>
+
+	<!--  주석  -->
+	
+	<form name="loginForm" action="boardList.html">
+		<!-------------------------------------------------------->
+		<table border=0 cellpadding=4>
+		<!-------------------------------------------------------->
+			<tr>
+				<th>
+					[로그인]
+				</th>
+			</tr>
+			<tr>
+				<td align=center>
+					<!-------------------------------------------------------->
+					<table border=1 style="border-collapse:collapse" cellpadding=5 bordercolor="lightgray">
+					<tr>
+						<td align="right" bgcolor="#E9E9E9">아이디</td>
+						<!--nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn-->
+						<td><input type="text" name="uid" class="uid" size=10></td>
+						<!--nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn-->
+					</tr>
+					<tr>
+						<td align="right" bgcolor="#E9E9E9">암 호</td>
+						<!--nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn-->
+						<td><input type="password" name="pwd" class="pwd" size=10></td>
+						<!--nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn-->
+					</tr>
+					</table>
+					<!-------------------------------------------------------->
+				</td>
+			</tr>
+			<tr>
+				<td align=center>
+
+
+
+
+					<!-------------------------------------------------------->
+					<!-- 버튼을 클릭하면 자바스크립트 영역의 checkForm 함수 호출하기->
+					<!-------------------------------------------------------->
+					<input type="button" class="login_btn" value="로그인">
+
+
+
+
+
+
+					<input type="reset" value="초기화">
+
+
+					<!-------------------------------------------------------->
+					<!-- 회원가입 글씨를 클릭하면 memberRegForm.html 페이지 열어주기-->
+					<!-------------------------------------------------------->
+					<div style="cursor:pointer" class="regMember_btn">[회원가입]</div>
+
+
+				</td>
+			</tr>
+		<!-------------------------------------------------------->
+		</table>
+		<!-------------------------------------------------------->
+
+	</form>
+
+</center>
+</body>
+
+</html>

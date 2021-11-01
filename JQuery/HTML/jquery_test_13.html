@@ -1,0 +1,139 @@
+<!-- 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_test_13.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ -->
+  <html>
+	<head>
+		<script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+		<script language="JavaScript">
+			// id =skills 를 가진 태그의 아들 중 name="skill~" 를 가진 태그들에
+			// change 이벤트가 발생하면 실행할 코드 설정
+		$(document).ready(function(){
+			$("#skills").children("[name^=skill]").change(function(){
+				// change 이벤트가 발생한 select 태그를 관리하는 JQuery 객체의 메위주를 얻어
+				// 변수 selectObj 에 저장하기
+				var selectObj = $(this);
+				// change 이벤트가 발생한 select 태그의 현재 선택값을 얻어 변수 choicedVal 저장
+				var choicedVal = selectObj.val();
+				// change 이벤트가 발생한 select 태그의 형재 중 나의 인덱스 번호 저장
+				var idx = selectObj.index()
+
+				// change 이벤트가 발생한 select 태그의 선택값과 형제들의 선택값을
+				// 저장할 Array 객체 생성하고 선택값을 구해서 Array 객체에 저장
+				var values = [];
+
+				var allSeletObj = selectObj.parent().children("[name^=skill]");
+				allSeletObj.each(function(i){
+					var value = $(this).val();
+					if(value==null || value==""){
+						values.push("");
+					}else{
+						values.push(value);
+					}
+
+				})
+				// i번째 select 태그와 ii 번째 select 태그와의 선택값 관계가
+				// 이상이 있으면 선택값을 비우기
+				for(var i=0; i<values.length-1; i++){
+					for(var ii=i+1; ii<values.length; ii++){
+						// i 번째 select 태그의 선택값은 없는다
+						// ii 번째 select 태그의 선택값은 있다면
+						// 즉 i번째 형은 없는데  ii 번째 동생은 있다면
+						if(values[i]=="" && values[ii]!=""){
+							// i 번째 select 태그 이후의 모든 select 태그의 value 값을 비우기
+							allSeletObj.eq(i).nextAll().val("")
+						}
+						// i 번째 select 태그의 선택값은 있고
+						// i 번째 select 태그의 선택값과 ii 번째  select 태그의 선택값이 같으면
+						// 즉 i번째 형의 값과 ii 번째 동생의 값이 같다면
+						else if(values[i]!="" && values[i]==values[ii]){
+							// ii 번째 select 태그부터 시작해서 그 이후의 모든 select 태그의 value 값을 비우기
+							allSeletObj.eq(ii-1).nextAll().val("")
+						}
+					}
+				}
+				// 형이 가진 option 태그를 복사해 바로 아래 동생의 select 태그안에
+				// 덮어 씌우고 형이 선태한 데이터가 있으면 그 데이터를 가진
+				// option 티그를 지우기
+				for(var i=0; i<allSeletObj.length-1; i++){
+					// i 번째 select 태그의 선택값을 얻어서 변수에 저장하기
+					var nowValue = allSeletObj.eq(i).val();
+					// i+1 번째 select 태그의 선택값을 얻어서 변수에 저장하기
+					var nextValue = allSeletObj.eq(i+1).val();
+
+					// i 번째 select 태그가 가진 option 태그를 복사해서
+					// i+1 번째 select 태그 안에 덮어 씌우기
+					allSeletObj.eq(i+1).html(allSeletObj.eq(i).html());
+
+					// i 번째 select 태그의 선택값이 있으면
+					if(nowValue!=""){
+						// i+1 번째 select 태그 내부의 option 태그 중
+						// i번째 select 태그의 선택값을 가진 option 태그를 지우기
+						allSeletObj.eq(i+1).children().filter("[value='"+nowValue+"']").remove();
+						// allSeletObj.eq(i+1).find("[value='"+nowValue+"']").remove();
+						
+
+						// i+1 번째 select 태그에 선택값이 있었다면 그 값을 다시 선택하게 하기
+						if(nextValue!=""){
+							allSeletObj.eq(i+1).val(nextValue);
+						}
+
+					}
+					// i 번째 select 태그의 선택값이 있으면
+					else{
+						// i+1 번째 select 태그의 선택값 지우기
+						allSeletObj.eq(i+1).val("");
+					}
+
+				}
+
+
+
+
+
+
+				$("body").append("<hr>" + values.join(","))
+
+				
+				
+				
+				
+				
+				
+			})
+
+		});
+</script>
+	</head>
+	<body>
+		<!---------------------------------------------------------------->
+		<span id="skills">
+		[소유스킬] :
+		<select name="skill1">
+			<option value="">
+			<option value="JSP">JSP
+			<option value="ASP">ASP
+			<option value="PHP">PHP
+			<option value="Oracle">Oracle
+			<option value="Java">Java
+		</select>
+		<select name="skill2">
+			<option value="">
+			<option value="JSP">JSP
+			<option value="ASP">ASP
+			<option value="PHP">PHP
+			<option value="Oracle">Oracle
+			<option value="Java">Java
+		</select>
+		<select name="skill3">
+			<option value="">
+			<option value="JSP">JSP
+			<option value="ASP">ASP
+			<option value="PHP">PHP
+			<option value="Oracle">Oracle
+			<option value="Java">Java
+		</select>
+		</span>
+	</body>
+</html>

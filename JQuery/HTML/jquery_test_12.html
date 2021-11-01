@@ -1,0 +1,97 @@
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_test_12.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	=>tr 태그의 순서를 3초마다 바꾸어 본다.-->
+<html><meta charset="UTF-8">
+<head>
+	<script src="jquery-1.11.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// 3초 마다 함수 upTr('character')를 반복적으로 호출
+			setInterval(function(){
+				upTr('character');
+			},1*1000);
+			// 3초 마다 함수 leftTr('movie')를 반복적으로 호출
+			setInterval(function(){
+				leftTd('movie');
+			},1*1000);
+		});
+		// 첫번째 tr 를 복사해서 마지막 tr 태그 다음에 삽입하고
+		// 첫번째 tr 을 삭제하는 함수 선언.
+		function upTr(idV){
+			// tableObj 변수 선언하고
+			// id='idV매개변수저장값' 가진 테이블 태그를 관리하는
+			// JQuery 객체를 생성하고 객체의 메위주를 tableObj 변수에 저장
+			var tableObj = $("#"+idV);
+
+
+			// firstTrObj 변수 선언하고
+			// 첫번째 tr을 관리하는 JQuery 객체가 메위주를 firstTrObj 변수에 저장
+			var firstTrObj = tableObj.find("tr").eq(0);
+			//위 코딩은 아래 코딩으로 대체가 가능하다.
+			// var firstTrObj = tableObj.find("tr:eq(0)");
+			// var firstTrObj = tableObj.find("tr").first();
+
+			// lastTrObj 변수 선언하고
+			// 마지막 tr을 관리하는 JQuery 객체의 메위주를 lastTrObj 변수에 저장
+			var lastTrObj = tableObj.find("tr").last();
+			// var lastTrObj = tableObj.find("tr").eq(tableObj.find("tr").length-1);
+
+			// 첫번째 tr을 복제해서 마지막 tr 다음에 삽입하자
+			lastTrObj.after(firstTrObj.clone());
+			// 첫번째 tr을 삭제하라.
+			firstTrObj.remove();
+		}
+
+
+		// 첫번째 td 를 복사해서 마지막 td 태그 다음에 삽입하고
+		// 첫번째 td 을 삭제하는 함수 선언.
+		function leftTd(idV){
+			var tableObj = $("#"+idV);
+
+
+			// firstTdObj 변수 선언하고
+			// 첫번째 td을 관리하는 JQuery 객체가 메위주를 firstTdObj 변수에 저장
+			var firstTdObj = tableObj.find("tr td").eq(0);
+			//위 코딩은 아래 코딩으로 대체가 가능하다.
+			// var firstTdObj = tableObj.find("tr td:eq(0)");
+			// var firstTdObj = tableObj.find("tr td").first();
+
+			// lastTdObj 변수 선언하고
+			// 마지막 td을 관리하는 JQuery 객체의 메위주를 lastTdObj 변수에 저장
+			var lastTdObj = tableObj.find("tr td").last();
+			// var lastTdObj = tableObj.find("tr td").eq(tableObj.find("tr td").length-1);
+
+			// 첫번째 td을 복제해서 마지막 td 다음에 삽입하자
+			lastTdObj.after(firstTdObj.clone());
+			// 첫번째 td을 삭제하라.
+			firstTdObj.remove();
+		
+		}
+
+	</script>
+</head>
+
+<body><center>
+	<table border=0 cellspacing=0 cellpadding=5 id="character" align=center>
+		<tr bgcolor=#FFFF00>
+			<td>보노보노</td>
+		<tr bgcolor=#FFCC00>
+			<td>도라이몽</tr>
+		<tr bgcolor=#FF9900>
+			<td>짱구</td>
+		<tr bgcolor=#FF6600>
+			<td>피카츄</td>
+	</table><br><br>
+
+	 <table border=0 cellspacing=0 cellpadding=5 id="movie" align=center>
+		<tr bgcolor=#FFFF00>
+			<td bgcolor=#FFFF00>랑종</td>
+			<td bgcolor=#FFCC00>곡성</td>
+			<td bgcolor=#FF9900>엑소시스트</td>
+			<td bgcolor=#FF6600>여고괴담</td>
+	</table><br><br> 
+</body>
+
+</html>
+

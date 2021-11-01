@@ -1,0 +1,91 @@
+<!-- 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_test_10.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	=>문자열이 사라지면서 다른 문자열이 보이는 예제
+	=>나타났다 사라지는 문자열의 개수는 div 태그 안의 목록들이다.
+-->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<style>
+		div{
+			font-size: 200px;
+
+			margin: 200px;
+		}
+	</style>
+	<script src="jquery-1.11.0.min.js"></script>  
+	<script>
+		// 준비한 컨텐츠 들을 차례 대로 화면에 보이고 사라지게하는 함수 선언
+		function changeText(
+			classV // 클래스값을 받아오는 매개변수. 화면에 보여줄 컨텐츠를 내포하는 div 태그의 클래스 값
+			,idx // 화면에 보여줄 컨텐츠의 인덱스 번호
+			){
+			// class="classV매개변수저장데이터" 를 가진
+			// 태그의 자식 태그를 관리하는 JQuery 객체 생성해서 obj 변수에 저장.
+			var obj = $("."+classV).children();
+			// class="classV매개변수저장데이터" 를 가진 태그를 모두 감추기
+			obj.hide();
+			// 특정 자식을 지칭하기 위한 인덱스 번호의 범위를 넘어서면 다시 0으로 초기화하기
+			// 즉 idx 변수 안의 데이터가 0~자식태그개수-1 범위가 아니면 0으로 바꾸기
+			if(obj.length<=idx || idx<0){
+				idx = 0
+			}
+			
+			
+			
+/*
+			// 매개변수 idx에 저장된 인덱스번호에 해당하는 놈 보이기
+			// 2초뒤에 완벽히 보이게 하기
+			obj.eq(idx).fadeIn(2000);
+			// 매개변수 idx에 저장된 인덱스번호에 해당하는 놈을 투명해지면서 안보이게하기
+			// fadeOut에 2000(=2*1000)을 넣어 2초 뒤에 완전히 안보이게 하기
+			// setTimeout 메소드를 사용 해  위 코드 실행 후  2초 뒤에 실행하기
+			setTimeout(function(){
+				obj.eq(idx).fadeOut(2000);
+
+			},2000)
+			// 위 코드 실행 후 2초 뒤에 changeText(classV,idx+1) 실행하기
+			setTimeout(function(){
+				changeText(classV,idx+1);
+				
+			},4000)
+*/
+			// 위 코드는 아래처럼 가능하다!!!!!
+
+			// 매개변수 idx에 저장된 인덱스번호에 해당하는 놈 보이게 하고
+			// fadeIn이 끝난다음 fadeOut을 실행 fadeOut이 끝난다음 changeText(classV,idx+1); 을 실행
+			obj.eq(idx).fadeIn(2000,function(){
+				obj.eq(idx).fadeOut(2000,function(){
+					changeText(classV,idx+1);
+				});
+			});
+
+
+
+
+		}
+		$(document).ready(function() {
+			changeText("people",3)
+		});
+	</script>  
+</head>
+
+
+
+
+
+<body><center>
+	<div class=people>
+		<div>얀센형제</div>
+		<div>저팔계</div>
+		<div>사오정</div>
+		<div>손오공</div>
+		<div>한승태</div>
+	</div>
+</body>
+
+</html>
+
+

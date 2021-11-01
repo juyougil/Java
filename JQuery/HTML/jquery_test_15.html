@@ -1,0 +1,599 @@
+<!--
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_test_15.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	=>학점 관련 [체크박스]를 체크하고 [검색] 버튼 클릭하면 체크한 학점에 맞는 [검색 결과]만 화면에 보여준다.
+-->
+<html><meta charset="UTF-8">
+<head>
+	<style>.style1 { background-color: #00f; color: #fff; } </style>
+	<script src="jquery-1.11.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+
+			// 검색된 tr, 즉 화면에 보이는 tr 의 개수를
+			// class=count 가진 태그안에 삽입하는 함수 호출하기
+			inputSearchCnt();
+
+
+
+
+
+			$(".sungjuk").find("thead tr").css("background-color","lightblue")
+			inputBgColor_to_tr($(".sungjuk").find("tbody tr"), "white","lightgray");
+
+
+
+			// 검색 결과물을 내장한 table 태그 안에 역순 일련 번호가 있는 새로운 1열을 넣어주거나
+			// 수정해주는  inputFirstColumn 함수 호출하기
+			inputFirstCloumn($(".sungjuk"));	
+
+
+
+			// class=search 가진 태그에 click 이벤트가 일어나면
+			// 검색을 구현하는 코딩을 실행하게 설정.
+			$(".search").bind("click",function(){
+				var trsObj = $(".sungjuk tbody tr");
+
+				// 체크된 학점의 개수를 얻기
+				var checkHakjumCnt = $("[name='hakjum']").filter(":checked").size();
+
+				// 만약 체크된 학점이 0개면 모두 보이고 함수 중단
+				if(checkHakjumCnt<=0){
+					alert("체크박스를 선택해주세요.");
+					trsObj.show();
+					return;
+				}
+
+				// 모든 tr 감추기
+				trsObj.hide();
+
+				// 체크된 학정을 Array 객체에 저장하기
+				var hakjums = []; // var hakjums = new Array();
+				
+				// 체크된 학점을 Array 객체에 저장하기
+				$("[name='hakjum']").each(function(i){
+					// i번째 "[name='hakjum']" 을  가진 놈을 관리하는 JQuery 객체의
+					// 메위주를 변수 thisObj에 저장하기
+					var thisObj = $(this);
+
+					// 만약에 i 번째 놈이 체크가 되어 있으면 Array 객체에 value 값 저장하기
+					if(thisObj.prop("checked")){
+					//if(thisObj.filter(":checked").length==1)
+					//if(thisObj.is(":checked"))
+						hakjums.push(thisObj.val())
+					}
+
+					// 검색 대상이 되는 tr에 차례대로 접근해서 각 tr 내부에 체크한 학점에 맞는 평균이 있으면
+					// tr 태그 보이게 하기
+					trsObj.each(function(i){
+
+
+						// thisTrObj 변수 선언
+						// i 번째 tr 태그를 관리하는 JQuery 객체를 생성하여 객체의 메위주를 thisTrObj 변수 에 저장하기
+						var thisTrObj = $(this)
+
+
+
+						//i 번째 tr 태그 안의 3번째 td 가 감싸고 있는 문자, 즉 평균을 얻은 후
+						//avg 변수에 저장
+						//var avg = trObj.find("td:eq(2)").text();
+						//var avg = trObj.find("td").eq(2).text();
+						//var avg = trObj.children("td:eq(2)").text();
+						var avg = thisTrObj.children("td").eq(3).text();
+
+
+						avg = $.trim(avg);
+						// if(avg.indexOf(" ")>=0){	alert("공백이 있음")}
+						avg = parseInt(avg,10);
+						
+
+						
+						// hakjum 변수 선언하고 평균에서 학정구해 저장하기
+						
+						var hakjum = "A"
+
+
+						if(avg>=80 && avg<90){hakjum = "B";}
+						else if(avg>=70 && avg<80){hakjum = "C";}
+						else if(avg>=60 && avg<70){hakjum = "D";}
+						else if(avg>=0 && avg<60){hakjum = "F";}
+
+
+
+						// i 번째 tr 내부의 평균이 해당하는 학점이
+						// Array 객체의 배열변수에 존재하면
+						// 변수 flag 에 true 저장하고 반복문을 중단하기
+						var flag = false;
+
+
+						for(var j=0; j<hakjums.length; j++){
+							// 만약에 j번째 배열변수안의 값이 hakjum 변수안의 값과 같으면
+							if(hakjums[j]==hakjum){
+								flag = true;
+								break;
+							}
+						}
+
+
+
+						// flag에 true가 있으면 i 번째 tr 보이기
+						if(flag){
+							thisTrObj.show();
+						}
+
+						inputFirstCloumn($(".sungjuk"))
+
+
+						// i번째 tr 내부의 평균이 Array 객체에 저장된
+						// 학점에 맞는 평균이면 i번째 tr을 보이고 반복문 중단하기
+
+						/*var flag = false;
+		
+						for(var j=0; j<hakjums.length; j++){
+
+
+							// 만약에 j번째 배열변수안의 값이 "A" 이고 avg 변수안의 값이 90~100 사이면
+							if(hakjums[j]=="A" && avg>=90 && avg <= 100){
+								flag = true;
+									break;
+							}
+							// 만약에 j번째 배열변수안의 값이 "B" 이고 avg 변수안의 값이 80~90 사이면
+							else if(hakjums[j]=="B" && avg<90 && avg >= 80){
+								flag = true;
+								break;
+							}
+							// 만약에 j번째 배열변수안의 값이 "C" 이고 avg 변수안의 값이 70~80 사이면
+							else if(hakjums[j]=="C" && avg<80 && avg >= 70){
+								flag = true;
+								break;
+							}
+							// 만약에 j번째 배열변수안의 값이 "D" 이고 avg 변수안의 값이 60~70 사이면
+							else if(hakjums[j]=="D" && avg<70 && avg >= 60){
+								flag = true;
+								break;
+							}
+							// 만약에 j번째 배열변수안의 값이 "F" 이고 avg 변수안의 값이 60 이하면
+							else if(hakjums[j]=="F" && avg<60 && avg>=0){
+								flag = true;
+								break;
+							}
+						}
+						// flag에 true가 있으면 i 번째 tr 보이기\
+						if(flag){
+							thisTrObj.show();
+						}*/
+						
+						inputBgColor_to_tr(trsObj,"white","lightgray")
+						inputSearchCnt();
+					})
+					
+					
+
+
+				})
+
+
+
+
+
+
+
+
+
+			})
+
+			// class=allSearch 가진 태그에 click 이벤트가 일어나면
+			// 체크를 모두 풀고 모든 행을 보이는 코딩을 실행하게 설정
+			$(".allSearch").bind("click",function(){
+				// 학점 체크를 모두 풀기
+				$("[name='hakjum']").each(function(i){
+					$(this).prop("checked", false)
+				})
+				// 검색 대상이 되는 모든 행을 보이기
+				$(".sungjuk tbody tr").show();
+				
+				inputFirstCloumn($(".sungjuk"))
+				inputSearchCnt();
+				inputBgColor_to_tr($(".sungjuk tbody tr"),"white","lightgray")
+			})
+
+			
+
+
+
+
+
+
+
+
+
+
+
+			
+
+			
+			// 정렬 하는 부분
+			var thObj = $(".sungjuk thead tr:eq(0) th");
+			thObj.click(function(){
+				var thisThObj=$(this);
+
+				var ascDesc = "";
+				thisThObj.siblings().each(function(i){
+					var txt = $(this).text();
+					txt = $.trim(txt);
+					txt = txt.replace("▲","");
+					txt = txt.replace("▼","");
+					$(this).text(txt);
+				})
+
+				var txt = thisThObj.text();
+
+
+				if(txt.indexOf("▲")>=0){
+					txt = txt.replace("▲","▼");
+					ascDesc ="desc";
+				}
+
+				else if(txt.indexOf("▼")>=0){
+					txt = txt.replace("▼","▲");
+					ascDesc ="asc";
+				}
+
+				else{
+					txt = txt + "▲";
+					ascDesc ="asc";
+				}
+
+
+				thisThObj.text(txt);
+				
+				var sortTrObj = $(".sungjuk tbody tr");
+
+
+				var trObjs =[];
+
+				sortTrObj.each(function(i){
+					trObjs.push($(this));
+				})
+
+
+
+				var thIndex = thisThObj.index();
+
+
+
+
+				for(var j=0; j<trObjs.length-1; j++){
+					for(var k=j+1; k<trObjs.length; k++){
+
+
+						var td1Text =  trObjs[j].children('td').eq(thIndex).text();
+						td1Text = ($.trim(td1Text)).toLowerCase();
+						if( thIndex==3 || thIndex==0) { td1Text = parseInt(td1Text,10); }
+
+
+						var td2Text =  trObjs[k].children('td').eq(thIndex).text();
+						td2Text = ($.trim(td2Text)).toLowerCase();
+						if( thIndex==3 || thIndex==0) { td2Text = parseInt(td2Text,10); }
+
+
+
+						if( ascDesc=="desc" && td1Text<td2Text ){
+							var tmp = trObjs[j]; 
+							trObjs[j] = trObjs[k]; 
+							trObjs[k] = tmp;
+						}
+
+
+						else if( ascDesc=="asc" && td1Text>td2Text ){
+							var tmp = trObjs[j];
+							trObjs[j] = trObjs[k]; 
+							trObjs[k] = tmp;
+						}
+
+					}
+
+				}
+
+
+				$(".sungjuk tbody:eq(0)").empty();
+				for(var j =0; j<trObjs.length; j++){
+					$(".sungjuk tbody:eq(0)").append(trObjs[j])
+				}
+
+
+				inputBgColor_to_tr($(".sungjuk tbody tr"),"white","lightgray")
+
+			})
+
+
+/*		
+// 검색 버튼 누르면 생기는 일들 
+			var trsObj = tableObj.find("tbody tr");
+			var checkboxs = $("[name='hakjum']");
+			$(".search").bind("click",function(){
+
+		
+				var checkedCnt = 0;
+				for(var i=0; i<checkboxs.length; i++){
+					if(checkboxs[i].checked){
+						checkedCnt++;
+					}
+				}
+
+
+				if(checkedCnt==0){
+				alert("체크박스를 선택해주세요.");
+				trsObj.show();
+				return;
+				}
+
+				trsObj.hide();
+
+
+				trsObj.each(function(i){
+
+					var trObj = $(this);
+
+					var score = trObj.find("td:eq(2)").text();
+					score = parseInt(score,10);
+
+
+					var checkboxA = checkboxs.eq(0).prop("checked");
+					var checkboxB = checkboxs.eq(1).prop("checked");
+					var checkboxC = checkboxs.eq(2).prop("checked");
+					var checkboxD = checkboxs.eq(3).prop("checked");
+					var checkboxF = checkboxs.eq(4).prop("checked");
+
+					if(checkboxA){
+						if(score>=80){
+							trObj.show();
+						}
+					}
+
+
+					if(checkboxB){
+						if(score<80 && score>=70){
+							trObj.show();
+						}
+					}
+
+
+
+					if(checkboxC){
+						if(score<70 && score>=60){
+							trObj.show();
+						}
+					}
+
+
+					if(checkboxD){
+						if(score<60 && score>=50){
+							trObj.show();
+						}
+					}
+
+
+
+					if(checkboxF==true){
+						if(score<50){
+							trObj.show();
+						}
+					}
+
+
+					inputBgColor_to_tr(trsObj,"white","lightgray")
+				})
+				
+			})
+
+			// 정렬 하는 부분
+			var thObj = $(".sungjuk thead tr:eq(0) th");
+			thObj.click(function(){
+				var thisThObj=$(this);
+
+				var ascDesc = "";
+				thisThObj.siblings().each(function(i){
+					var txt = $(this).text();
+					txt = $.trim(txt);
+					txt = txt.replace("▲","");
+					txt = txt.replace("▼","");
+					$(this).text(txt);
+				})
+
+				var txt = thisThObj.text();
+
+
+				if(txt.indexOf("▲")>=0){
+					txt = txt.replace("▲","▼");
+					ascDesc ="desc";
+				}
+
+				else if(txt.indexOf("▼")>=0){
+					txt = txt.replace("▼","▲");
+					ascDesc ="asc";
+				}
+
+				else{
+					txt = txt + "▲";
+					ascDesc ="asc";
+				}
+
+
+				thisThObj.text(txt);
+				var sortTrObj = $(".sungjuk tbody tr");
+
+
+				var trObjs =[];
+
+				sortTrObj.each(function(i){
+					trObjs.push($(this));
+				})
+
+
+
+				var thIndex = thisThObj.index();
+
+
+
+
+				for(var j=0; j<trObjs.length-1; j++){
+					for(var k=j+1; k<trObjs.length; k++){
+
+
+						var td1Text =  trObjs[j].children('td').eq(thIndex).text();
+						td1Text = ($.trim(td1Text)).toLowerCase();
+						if( thIndex==2 ) { td1Text = parseInt(td1Text,10); }
+
+
+						var td2Text =  trObjs[k].children('td').eq(thIndex).text();
+						td2Text = ($.trim(td2Text)).toLowerCase();
+						if( thIndex==2 ) { td2Text = parseInt(td2Text,10); }
+
+
+
+						if( ascDesc=="desc" && td1Text<td2Text ){
+							var tmp = trObjs[j]; 
+							trObjs[j] = trObjs[k]; 
+							trObjs[k] = tmp;
+						}
+
+
+						else if( ascDesc=="asc" && td1Text>td2Text ){
+							var tmp = trObjs[j];
+							trObjs[j] = trObjs[k]; 
+							trObjs[k] = tmp;
+						}
+
+					}
+
+				}
+
+
+				$(".sungjuk tbody:eq(0)").empty();
+				for(var j =0; j<trObjs.length; j++){
+					$(".sungjuk tbody:eq(0)").append(trObjs[j])
+				}
+
+			})
+
+
+
+
+			// 모두 검색을 눌렀을 때
+			$(".allSearch").click(function(){
+				checkboxs.each(function(i){
+					$(this).prop("checked", false)
+				})
+				trsObj.show();
+			})
+
+
+*/
+
+		}); 
+
+
+		// class= count 가진 태그안에 검색결과물
+		// 즉 화면에 보이는 tr 태그의 총개수 삽입하는 함수 선언
+		function inputSearchCnt(){
+			$(".count").text($(".sungjuk tr:visible").length-1 +"개")
+		}
+
+		// 검색결과물의 table 태그에 일련번호가 있는 새로운 1열을 첫번째에 삽입하기
+		// 그런데 이미 일련번호가 있다면 화면에 보이는 행의 일련번호를 새로운 일련 번호로 수정하기
+		function inputFirstCloumn(tableObj){
+			// 검색 대상인 모든 tr 태그를 관리하는 JQuery 객체 구해 변수 trsObj에 저장하기
+			var trsObj = tableObj.find("tr");
+
+			// 검색 대상인 모든  tr 태그 중 화면에 보이는
+			// tr 를 관리하는 JQuery 객체를 구해 변수 visible_trObj 에 저장하기
+			var visible_trsObj = trsObj.filter(":visible");
+
+			// 화면에 보이는 tr 의 개수 구해 변수 visibleTrCnt 에 저장하기
+			var visibleTrCnt = visible_trsObj.length-1;
+
+			// table 태그 안의 첫 tr 안의 1열에 "번호" 컬럼이 있으면 flag 변수에 true 저장하기
+			var flag = false;
+			var text = trsObj.first().find("th:eq(0)").text();
+			text = $.trim(text);
+
+			if(text=="번호" || text=="번호▲" || text=="번호▼"){ 
+				flag = true;
+			}
+
+
+			// flag 변수에 true 가 저장되어 있으면, 즉 table 태그의 1행 1열에 "번호" 컬럼이 있으면
+			 if(flag){
+				 // 보이는 tr 태그 안의 번호 컬럼 열에 새로운 역순 일련번호를 구해 덮어쓰기\
+				 visible_trsObj.each(function(i){
+					if(i>0){
+						$(this).find("td:eq(0)").text(visibleTrCnt--)
+
+					}
+				})
+
+			 }
+			 // flag 변수에 false 가 저장되어 있으면, 즉 table 태그의 1행 1열에 "번호" 컬럼이 없으면
+			 else{
+				 // 모든 tr 태그 안에 새로운 1열을 삽입하기
+				 trsObj.each(function(i){
+					var thisTrObj = $(this);
+					if(i==0){
+						thisTrObj.prepend("<th>번호")
+					}else{
+						thisTrObj.prepend("<td>" + (visibleTrCnt--))
+					}
+				})
+			 }
+		}
+
+		function inputBgColor_to_tr(trsObj,oddBgcolor,evenColor){
+			var visibleTrsObj = trsObj.filter(":visible");
+			visibleTrsObj.filter(":even").css("background-color", oddBgcolor);
+			visibleTrsObj.filter(":odd").css("background-color", evenColor);
+			}
+	</script>
+</head>
+<body><center>
+<!-------------------------------------------------->
+<input type="checkbox" name="hakjum" value="A">A학점
+<input type="checkbox" name="hakjum" value="B">B학점
+<input type="checkbox" name="hakjum" value="C">C학점
+<input type="checkbox" name="hakjum" value="D">D학점
+<input type="checkbox" name="hakjum" value="F">F학점<br>
+
+<input type="button" value="검색" class="search" >
+<input type="button" value="모두검색" class="allSearch" ><br><br>
+<!-------------------------------------------------->
+<div class="count"></div>
+<table border="1" cellpadding=5 class="sungjuk" style="border-collapse:collapse;">
+	<thead>
+		<tr ><th style="cursor:pointer">학생번호<th style="cursor:pointer" >이름<th style="cursor:pointer">평균
+	</thead>
+	<tbody>
+		<tr><td>101<td>John<td>87
+		<tr><td>102<td>Naman<td>90
+		<tr><td>103<td>Chirag<td>85
+		<tr><td>104<td>David<td>92
+		<tr><td>105<td>Kelly<td>81
+		<tr><td>106<td>Charles<td>77
+		<tr><td>107<td>Jerry<td>91
+		<tr><td>108<td>Beth<td>87
+		<tr><td>109<td>Caroline<td>82
+		<tr><td>110<td>Hanen<td>71
+		<tr><td>111<td>Douglas<td>57
+		<tr><td>112<td>Tim<td>86
+		<tr><td>113<td>Michael<td>68
+		<tr><td>114<td>Kimbley<td>88
+		<tr><td>115<td>Christinax<td>72
+		<tr><td>116<td>유원영<td>100
+		<tr><td>117<td>강다니엘<td>20
+		<tr><td>118<td>박인선<td>20
+	</tbody>
+</table>
+</body>
+
+
+</html>
