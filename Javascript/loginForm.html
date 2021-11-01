@@ -1,0 +1,116 @@
+<html>
+<meta charset="UTF-8">
+<head>
+	<title></title>
+	<!--comon_func.js-->
+	<script src="common_func.js"></script>
+	<!--script 태그 선언. scirpt 태그는 자바스크립트 세상이다.-->
+	<script>
+		//매게변수로 들어온 데이터가 비어있거나 공백으로 구성되어 있으면 true 를 리턴
+		//아니면 false 를 리턴하는 함수 선언
+		/*function isEmpty(str){
+			var flag = false;
+			if(str.split(" ").join("")==""){
+				flag = true;
+			}
+			return flag;
+			//flag가 아니라 flag에 들어있는 데이터를 리턴 결국 true 또는 false를 리턴한다고 보면 된다.
+		}*/
+		//함수 선언 유저가 입력한 아이디와 암호의 유효성을 체크할 checkForm 함수 선언
+		function checkForm(){
+			// 유저가 입력한 아이디를 가져와서 변수 uid 에 저장하기
+			// value는 Text 객체의 속성변수이다.
+			// Text 객체는 <input type = "text" name="uid" size=10 > 이 태그를 관리하는 객체이다.
+			var uid = document.loginForm.uid.value;
+			// 유저가 입력한 암호를 가져와서 변수 pwd 에 저장하기
+			// value는 Password 객체의 속성변수이다.
+			// Text 객체는 <input type = "password" name="pwd" size=10 > 이 태그를 관리하는 객체이다.
+			var pwd = document.loginForm.pwd.value;
+
+			//만약에 유저가 입력한 아이디가 비어있으면 공백으로 이루어져 있으면
+			/*if(uid.split(" ").join("")=="") {
+				// 경고상자 띄우기
+				alert("아이디가 비어 있음. 입력 바람")
+				// 함수 중단하기. 이후 코딩은 실행되지 않는다.
+				return;	
+			}
+			// 만약에 유저가 입력한 암호가 암호가 비어있으면 공백으로 이루어져 있으면
+			if(pwd.split(" ").join("")==""){
+				// 경고상자 띄우기
+				alert("암호가 비어 있음. 입력 바람")
+				// 함수 중단하기
+				return;	
+			}*/
+			//만약에 유저가 입력한 아이디가 비어있으면 공백으로 이루어져 있으면
+			//isEmpty 함수 호출하여  ture를 리턴받으면, 즉 비어있거나 공백으로 이루어져 있으면
+			if(isEmpty(uid)) {
+				// 경고상자 띄우기
+				alert("아이디가 비어 있음. 입력 바람")
+				// 함수 중단하기. 이후 코딩은 실행되지 않는다.
+				return;	
+			}
+			// 만약에 유저가 입력한 암호가 암호가 비어있으면 공백으로 이루어져 있으면
+			if(isEmpty(pwd)){
+				// 경고상자 띄우기
+				alert("암호가 비어 있음. 입력 바람")
+				// 함수 중단하기
+				return;	
+			}
+			//만약에 아이디가 "abc"이고 암호가 123이면
+			if(uid=="abc"&&pwd=="123"){
+				if(confirm("로그인할까요?")){
+					// form 태그의 설정한 서버쪽 URL 주소로 접근하기
+					// 즉 새로운 페이지 만들기
+					document.loginForm.submit();
+				}
+			}else {
+				alert("아이디 또는 암호가 틀렸음! 재입력 바람!");
+				//아이디 입력란 비우기
+				document.loginForm.uid.value ="";
+				//암호 입력란 비우기
+				document.loginForm.pwd.value ="";
+			}
+		}
+	</script>
+</head>
+
+
+<body>
+	<center><br><br><br>
+		<form action="boardList.html" name="loginForm"> 
+			<table border=0 cellpadding=4>
+				<tr>
+					<th> 
+						[로그인]
+					</th>
+				</tr> 
+				<tr>
+					<td align = "center" >
+						<table border=1 style = "border-collapse:collapse" cellpadding=5 bordercolor = lightgray>
+						<tr> 
+							<td align = "right" bgcolor = "#31CEAE">아이디</td> 
+							<td> <input type = "text" name="uid" size=10 ></td> 
+						</tr>
+						<tr>
+							<td align = "right" bgcolor = "#31CEAE">암호</td> 
+							<td> <input type = "password" name="pwd" size=10></td> 
+						</tr>
+						</table> 
+					</td>
+				</tr>
+				<tr>
+					<td align = "center">
+						<!--버튼을 클릭하면 자바스크립트 영역의 checkForm 함수 호출하게-->
+						<input type = "button" value="로그인" onclick="checkForm();">
+						<input type = "reset"  value= "초기화">
+						<!--회원가입 글씨를 클릭하면  memberRegForm.html  페이지 열어-->
+						<div style="cursor: pointer;" onclick="location.replace('memberRegForm.html')">[회원가입]</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</center>
+</body>
+
+
+</html> 

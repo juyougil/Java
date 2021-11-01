@@ -1,0 +1,217 @@
+<html>
+<meta charset="UTF-8">
+<head>
+	<title></title>
+    <script src="common_func.js"></script>
+    <script src="common_data.js"></script>
+    <script>
+        //요일별 메시지를 보여주는 openMesage 함수 선언
+        function openWeekMesage(){
+            // week 변수 선언. getTodayWeek() 함수 호출로 현재 요일을 얻어 week 변수에 저장
+            var week = getTodayWeek();
+            // msg 변수 선언. 공용 함수 안의 weekMsg라는 변수에 저장된
+            // JSON 객체 안에서 week 변수안에 문자를 키값으로 가지고 놈의 저장 문자를 얻어
+            // 변수 msg에 저장하기
+            var msg = weekMsg[week]
+            //경고창 띄우기
+            //alert(msg)
+            return msg
+        }
+
+        function getScheduleMsg(){
+            //common_date.js 파일 안의 scheduleMsg 변수의 2차원 Array 객체 안을 검색
+            /*
+            for(var i =0; i<scheduleMsg.length; i++){
+                for(var j = 0; j<scheduleMsg[i].length; j++){
+                    var data = scheduleMsg[i][j];
+                    alert(data);
+                }
+            }*/
+            var tot_msg = "";
+            for(var i =0; i<scheduleMsg.length; i++){
+                var date = scheduleMsg[i][0];
+                date = deleteBlank(date);
+                var msg = scheduleMsg[i][1];
+                if(isToday(date)){
+                //alert(msg);
+                tot_msg = tot_msg + msg;
+                }
+            }
+            return tot_msg;
+        }
+
+        // common_date.js 파일 안의 scheduleMsg 변수안의 2차원 Array 객체에 접근해서
+        // 오늘 날짜가 일치하는 놈의 메시지들을 모아서 리턴하는 함수
+        function getScheduleMsg(){
+                                //common_date.js 파일 안의 scheduleMsg 변수의 2차원 Array 객체 안을 검색
+                                /*
+                                for(var i =0; i<scheduleMsg.length; i++){
+                                    for(var j = 0; j<scheduleMsg[i].length; j++){
+                                        var data = scheduleMsg[i][j];
+                                        alert(data);
+                                    }
+                                }*/
+            // 메시지를 저장할 Array 객체 생성하기
+            var arr = [];
+            // scheduleMsg 변수안의 2차원 Array 객체에 접글해서
+            // 오늘 날짜와 일치하는 놈의 메시지를 모아서 Array 객체에 저장하기
+            for(var i =0; i<scheduleMsg.length; i++){
+                var date = scheduleMsg[i][0];
+                var msg = scheduleMsg[i][1];
+                if(isToday(date)){
+                //alert(msg);
+                arr.push(msg);
+                }
+            }
+            // Array 객체에 저장된 메시지를 모두 붙여 문자로 리턴하기
+            return arr.join(" ");
+        }
+
+        // 명언을 리턴하는 함수 선언
+        // 명언 문자열은 common_data.js 파일 안의 goldenSaying 변수안에 자정되어 있다.
+        function get_GoldenSaying(){  
+
+            // goldenSaying 변수안에 저장된 Array 객체 안의 배열변수의 개수 얻기
+            // 이 개수가 명언의 개수이다.
+            var goldenSaying_Cnt = goldenSaying.length 
+
+            // 0~ 명언개수-1 사이의 무작위 인덱스 번호 얻기
+            // 이 인덱스번호는 무작위 배열변수를 선택할 때 사용한다.
+            var random_index = Math.floor(Math.random()*goldenSaying_Cnt);
+
+            // 무작위 인덱스 번호에 해당하는 배열변수를 리턴하기
+            return goldenSaying[random_index];
+
+        }
+
+        // 오늘부터 미래의 특정 날짜까지의 남은 날이 10일 이하일 때 
+        //그 특정 날짜에 대응하는 메시지들을 리턴하는 함수
+        // 특정 날짜와 메시지는 common_data_js 파일 안의 dDayMsg 변수안에 저장되어 있다.
+        function get_DDayMsg(){
+            // D데이에 대응하는 메시지를 저장할 Array 객체 생성하기
+            var arr = [];
+
+            // dDayMsg 변수안의 2차원 Array 객체에 접근해서
+            // D데이가 10일 이하일때의 메시지들을 모아서 Array 객체에 저장하기
+            for(var i =0; i < dDayMsg.length; i++){
+                var date = dDayMsg[i][0];
+                date = deleteBlank(date);
+                var msg = dDayMsg[i][1];
+
+                // get_dDay 함수 호출하여 오늘부터 Array 객체 안의 i번째 날짜까지의 남을 일수를 구해서 변수 dDay에 저장하기
+                var dDay = get_dDay(date);
+                // 구한 디데이가 0~10일 사이면 Array 객체에 저장하기
+                if(dDay>=0 && dDay<=10){
+                    arr.push(date + " 까지 " + msg + "은(는) " + dDay + "일 남았습니다.");
+                } 
+                       
+            }
+            // Array 객체에 저장된 메시지들이 1개 이상이면 모든 메시지를 붙여 리턴하기
+            if(arr.length>0){
+                return arr.join("<br>");
+            // Array 객체에 저장된 메시지들이 0개면 "" 리턴하기
+            }else{
+                return "";
+            }
+
+        }
+
+        
+        function getRandomData(arr){
+            var data_Cnt = arr.length ;
+            var random_index = Math.floor(Math.random()*data_Cnt);
+            var randomData = arr[random_index];
+        return randomData;
+
+}
+    </script>
+</head>
+
+
+<body onload="openWeekMesage()">
+    <center>
+        <!--a 태그로 [새글쓰기]를 끌어안아서 클릭하면 boardRegForm.html 문서 열기-->
+        <!-- [게시판]&nbsp; &nbsp; &nbsp; &nbsp; [6개 검색] &nbsp;&nbsp;&nbsp;<a href="boardRegForm.html">[새 글쓰기]</a><br><br>-->
+        
+        [게시판] &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+        <!--span 태그로 [새글쓰기] 를 끌어안아서 클릭하면 boardRegForm.html 문서열기 =링크
+        div태그와 다른점은 한행을 차지하지 않는다는 것 공통점은 그룹화한다는 것
+        <태그명 on 이벤트명 = "자스코딩"--> 
+       <span style="cursor:pointer;" onclick="location.replace('boardRegForm.html')">[새글쓰기]</span>  
+       &nbsp; &nbsp; &nbsp;
+       <!--span 태그로 [새글쓰기] 를 끌어안아서 클릭하면 boardRegForm.html 문서열기 =링크-->                        
+       <span style="cursor:pointer;" onclick="location.replace('loginForm.html')">[로그아웃]</span>
+
+
+       <table border=1 style = "border-collapse:collapse" cellpadding=5>
+            <tr align = "center" bgcolor="lightgray" style="cursor: pointer;">
+                <th>번호</th>
+                <th width=300>제목</th>
+                <th>성명</th>
+                <th>작성일</th>
+                <th>조회수</th>    
+            </tr>
+            <tr style="cursor: pointer;" onclick="location.replace('boardContentform1.html')">
+                <td align = "center">6</td>
+                <td>청년 실직 문제는 대기업 문제</td>
+                <td align = "center">설현</td>
+                <td align = "center">2011.12.06</td>
+                <td align = "center">0</td>    
+            </tr>
+            <tr bgcolor="#F2F2F2" style="cursor: pointer;" onclick="location.replace('boardContentform2.html')">
+                <td align = "center">5</td>
+                <td>경제 침체의 원인</td>
+                <td align = "center">사오정</td>
+                <td align = "center">2011.12.01</td>
+                <td align = "center">2</td>    
+            </tr>
+            <tr style="cursor: pointer;" onclick="location.replace('boardContentform3.html')"> 
+                <td align = "center">4</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ㄴ안보문제</td>
+                <td align = "center">하하</td>
+                <td align = "center">2011.12.03</td>
+                <td align = "center">1</td>    
+            </tr>
+            <tr bgcolor="#F2F2F2" style="cursor: pointer;" onclick="location.replace('boardContentform4.html')">
+                <td align = "center">3</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ㄴ북한 핵 문제</td>
+                <td align = "center">전지현</td>
+                <td align = "center">2011.12.05</td>
+                <td align = "center">0</td>    
+            </tr>
+            <tr style="cursor: pointer;" onclick="location.replace('boardContentform5.html')">
+                <td align = "center">2</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ㄴ나라 빛 관리 부실</td>
+                <td align = "center">저팔계</td>
+                <td align = "center">2011.12.02</td>
+                <td align = "center">1</td>    
+            </tr>
+            <tr bgcolor="#F2F2F2" style="cursor: pointer;" onclick="location.replace('boardContentform6.html')">
+                <td align = "center">1</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ㄴ엔화 하락 문제</td>
+                <td align = "center">김태희</td>
+                <td align = "center">2011.12.02</td>
+                <td align = "center">0</td>    
+            </tr>
+       </table><br>
+       [처음]&nbsp;[이전]&nbsp;&nbsp;[1]&nbsp;[2]&nbsp;[3]&nbsp;[4]&nbsp;[5]&nbsp;[6]&nbsp;[7]&nbsp;[8]&nbsp;[9]&nbsp;[10]&nbsp;&nbsp;[다음]&nbsp;[마지막]<br><br>
+       <input type="text" name="keyword">&nbsp;
+       <input type="button" value="검색">&nbsp;
+       <input type="button" value="모두 검색">&nbsp;
+       <input type="button" value="로그아웃" onclick="location.replace('loginForm.html')">
+       <br><br><br>
+       <script>
+           document.write("<table border=1 style = 'border-collapse:collapse' cellpadding=5>");
+           document.write("<tr><th>오늘날짜<td>"+getTodayYMDW());
+           document.write("<tr><th>요일메시지<td>"+openWeekMesage());
+           document.write("<tr><th>일정메시지<td>"+getScheduleMsg());
+           document.write("<tr><th>오늘의 명언<td>"+get_GoldenSaying());
+           document.write("<tr><th>D-Day<td>"+get_DDayMsg());
+           document.write("</table>");
+
+       </script>
+    </center>
+</body>
+
+
+</html>
