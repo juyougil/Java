@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper 태그 선언 -->
+<mapper namespace="com.employee.prj.EmployeeDAO">
+<sql id="boardWhere">
+
+			<if test="keyword1!=null and keyword1.length()>0">
+			and
+			(
+			upper(e.emp_no) like upper('%${keyword1}%')
+			or
+			upper(e.emp_name) like upper('%${keyword1}%')
+			or
+			upper(e.jikup) like upper('%${keyword1}%')
+			or
+			upper(d.dep_name) like upper('%${keyword1}%')
+			or
+			to_char(e.hire_date,'YYYY-MM-DD') like '%${keyword1}%'	
+			)	
+			</if>
+			
+			<if test="checkjikup!=null and checkjikup.size()>0">
+			and
+			<foreach collection="checkjikup" item="checkjikup" open="(" separator="or" close=")">
+			
+				<if test="checkjikup.equals('사장')">
+					e.jikup = '사장'
+				</if>
+				<if test="checkjikup.equals('부장')">
+					e.jikup = '부장'
+				</if>
+				<if test="checkjikup.equals('과장')">
+					e.jikup = '과장'
+				</if>
+				<if test="checkjikup.equals('대리')">
+					e.jikup = '대리'
+				</if>
+				<if test="checkjikup.equals('주임')">
+					e.jikup = '주임'
+				</if>
+				<if test="checkjikup.equals('사원')">
+					e.jikup = '사원'
+				</if>
+			</foreach>
+			</if>
+			<if test="min_year!=null and min_year.length()>0 and min_month!=null and min_month.length()>0 and max_year!=null and max_year.length()>0 and max_month!=null and max_month.length()>0">
+			and
+				<![CDATA[e.hire_date >= to_date('${min_year+min_month+"01"}','YYYYMMDD') and e.hire_date <= last_day(to_date('${max_year+max_month+"01"}','YYYYMMDD')) ]]>
+			</if>
+			<if test="min_year!=null and min_year.length()>0 and min_month!=null and min_month.length()>0">
+			and
+				<![CDATA[e.hire_date >= to_date('${min_year+min_month+"01"}','YYYYMMDD') and e.hire_date <= sysdate ]]>
+			</if>
+			<if test="max_year!=null and max_year.length()>0 and max_month!=null and max_month.length()>0">
+			and
+				<![CDATA[e.hire_date >= to_date('10000101','YYYYMMDD') and e.hire_date <= last_day(to_date('${max_year+max_month+"01"}','YYYYMMDD')) ]]>
+			</if>
+</sql>
+
+
+
+
+
+
+<!-- 게시판 검색하는 select 문을 내포한 select 태그 선언 -->
+	<select id="getEmployeeList"  parameterType="com.employee.prj.EmployeeSearchDTO"  resultType="java.util.HashMap">
+		
+		select * from (select rownum RNUM,B.* from (
+		
+		select 
+			e.emp_no||'' "emp_no"
+			,e.emp_name "emp_name"
+			,e.jikup "jikup"
+			,to_char(e.hire_date,'YYYY-MM-DD(DY)','nls_date_language=Korean') "hire_date" 
+			,d.dep_name||'' "dep_name"
+		from employee e inner join dept d
+		on e.dep_no=d.dep_no
+		where
+			1=1
+		<!-- <sql id="boardWhere"> 태그 안에 삽입된 SQL 구문 삽입하기 -->
+		<include refid="boardWhere"/>
+		order by
+			e.emp_no desc
+			
+			
+		) B <![CDATA[where rownum<=${selectPageNo*rowCntPerPage}) where RNUM>=${selectPageNo*rowCntPerPage-rowCntPerPage+1}]]>
+	</select>
+
+
+
+	<!-- [검색한 게시판 목록 총개수] 리턴하는 select 내포하는 select 태그 선언 -->
+	<select id="getEmployeeListAllCnt" parameterType="com.employee.prj.EmployeeSearchDTO" resultType="int">
+		select 
+			count(*)
+		from employee e inner join dept d
+		on e.dep_no=d.dep_no
+		where
+			1=1
+		<!-- <sql id="boardWhere"> 태그 안에 삽입된 SQL 구문 삽입하기 -->
+		<include refid="boardWhere"/>
+	
+	</select>
+	
+	
+	
+	<insert id="insertEmployee" parameterType="com.employee.prj.EmployeeDTO">
+		insert into employee(
+			emp_no
+			,emp_name
+			,jikup
+			<if test="dep_no!=null">
+			,dep_no
+			</if>
+			<if test="salary!=null">
+			,salary
+			</if>
+			,jumin_num
+			,phone_num
+			<if test="mgr_emp_no!=null">
+			,mgr_emp_no
+			</if>
+			<if test="pic!=null and pic.length()>0">
+			,pic			
+			</if>
+			
+		) values(
+			(select nvl(max(emp_no),0)+1 from employee)
+			,#{emp_name}
+			,#{jikup}
+			<if test="dep_no!=null">
+			,#{dep_no}
+			</if>
+			<if test="salary!=null">
+			,#{salary}
+			</if>
+			,#{jumin_num}
+			,#{phone_num}
+			<if test="mgr_emp_no!=null">
+			,#{mgr_emp_no}
+			</if>
+			<if test="pic!=null and pic.length()>0">
+			,#{pic}		
+			</if>
+		)
+	</insert>
+	
+	
+	
+	<!-- 게시판 1개 글 검색하는 select 문을 내포한 select 태그 선언 -->
+	<select id="getEmployee" parameterType="int" resultType="com.employee.prj.EmployeeDTO">
+		select
+			emp_no		"emp_no"
+			,emp_name 	"emp_name"
+			,jikup 	"jikup"
+			,dep_no	 "dep_no"
+			,salary 	"salary"
+			,to_char(hire_date,'YYYY-MM-DD') "hire_date"
+			,jumin_num 	"jumin_num"
+			,phone_num 		"phone_num"
+			,mgr_emp_no		"mgr_emp_no"
+			,pic		"pic"
+		from employee
+		where
+			emp_no=#{emp_no}
+	
+	
+	</select>
+	
+	<!-- 삭제/수정할 게시판의 존재 개수를 리터하는 select 선언 -->
+	<select id="getEmployeeCnt" parameterType="com.employee.prj.EmployeeDTO" resultType="int">
+		select count(*) from employee where emp_no=#{emp_no}
+	
+	</select>	
+	
+	<!-- 게시판 수정 하는 update 을 내포하는 update 태그 선언 -->
+	<update id="updateEmployee" parameterType="com.employee.prj.EmployeeDTO">
+		update employee
+		set
+			emp_name = #{emp_name}
+			,jikup = #{jikup}
+			,dep_no = #{dep_no}
+			,hire_date = #{hire_date}
+			,salary = #{salary}
+			,jumin_num = #{jumin_num}
+			,phone_num = #{phone_num}
+			<if test="mgr_emp_no!=null">
+			,mgr_emp_no = #{mgr_emp_no}
+			</if>
+			<if test="mgr_emp_no==null">
+			,mgr_emp_no = null
+			</if>
+			<if test="is_del!=null and is_del.length()>0">
+			,pic = null
+			</if>
+			<if test="is_del==null or is_del.length()==0">
+			
+				<if test="pic!=null and pic.length()>0">
+				,pic = #{pic}
+				</if>
+				
+			</if>
+		 where emp_no=#{emp_no}
+	</update>
+	
+	
+	
+	<!-- 게시판 삭제하는 delete 내포하는 delete 태그 선언 -->
+	<delete id="deleteEmployee" parameterType="com.employee.prj.EmployeeDTO">
+	 delete from employee
+	 where emp_no=#{emp_no}
+	
+	
+	
+	</delete>
+	
+	
+	
+	<select id="getpresidentCnt"  resultType="int">
+		select
+			count(*)
+		from employee
+		where
+			jikup= '사장'
+	</select>
+	
+	
+	<select id="getEmployeeCustomerCnt" parameterType="int" resultType="int">
+		select
+			count(*)
+		from employee e inner join customer c
+		on e.emp_no = c.emp_no
+		where
+			c.emp_no = #{emp_no}
+	</select>
+	
+	
+	
+	<update id="getupdateCustomerCnt" parameterType="com.employee.prj.EmployeeDTO">
+		update customer
+		set
+			emp_no = null
+		 where emp_no = #{emp_no}
+	</update>
+	
+	
+	
+	<select id="getMgrCnt" parameterType="int" resultType="int">
+		select
+			count(*)
+		from employee
+		where
+			mgr_emp_no = #{emp_no}
+	</select>
+	
+	<update id="getupdateMgrEmpNoCnt" parameterType="com.employee.prj.EmployeeDTO">
+		update employee
+		set
+			mgr_emp_no = null
+		 where mgr_emp_no = #{emp_no}
+	</update>
+
+
+
+
+	<select id="getjikupList"  resultType="java.util.HashMap">
+		select 
+			distinct jikup "jikup"
+		from 
+			employee
+		order by decode(jikup,'사장',1,'부장',2,'과장',3,'대리',4,'주임',5,'사원',6) asc
+	</select>	
+	
+	
+	
+	<select id="getdeptList"  resultType="java.util.HashMap">
+        select 
+            distinct dep_no "dep_no"
+            , dep_name "dep_name"
+        from 
+            dept
+	</select>	
+	
+	<!-- 게시판 이미지 이름 가져오는 select 문을 포함한 select 태그 선언 -->
+	<select id="getPic" parameterType="com.employee.prj.EmployeeDTO" resultType="String">
+		select 
+			pic 
+		from employee
+			where emp_no=#{emp_no}
+	</select>
+		
+	
+	
+	
+
+</mapper>
+
+

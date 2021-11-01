@@ -1,0 +1,104 @@
+테이블 추가 및 데이터 인서트 쿼리
+
+
+
+create table code_skill (
+skill_code number(3),
+skill_name varchar2(20) not null unique,
+primary key(skill_code)
+);
+create sequence code_skill_seq start with 1 increment by 1;
+
+create table code_religion (
+religion_code number(3),
+religion_name varchar2(20) not null unique,
+primary key(religion_code)
+);
+create sequence code_religion_seq start with 1 increment by 1;
+
+create table code_school (
+school_code number(3),
+school_name varchar2(20) not null unique,
+primary key(school_code)
+);
+create sequence code_school_seq start with 1 increment by 1;
+
+create table staff (
+staff_no number(3),
+staff_name varchar2(14) not null,
+jumin_no char(14) not null unique,
+school_code number(3) not null,
+religion_code number(3) not null,
+graduate_day char(10) not null,
+foreign key(religion_code) references code_religion(religion_code),
+foreign key(school_code) references code_school(school_code),
+primary key(staff_no)
+);
+create sequence staff_seq start with 1 increment by 1
+
+create table staff_skill (
+staff_skill_no number(3),
+staff_no number(3) not null,
+skill_code number(3) not null,
+primary key(staff_skill_no),
+foreign key(staff_no) references staff(staff_no),
+foreign key(skill_code) references code_skill(skill_code)
+);
+create sequence staff_skill_seq start with 1 increment by 1;
+
+
+
+
+
+insert into code_skill values(code_skill_seq.nextval ,'Java' );
+insert into code_skill values(code_skill_seq.nextval ,'JSP' );
+insert into code_skill values(code_skill_seq.nextval ,'ASP' );
+insert into code_skill values(code_skill_seq.nextval ,'PHP' );
+insert into code_skill values(code_skill_seq.nextval ,'Delphi' );
+insert into code_religion values(code_religion_seq.nextval ,'기독교' );
+insert into code_religion values(code_religion_seq.nextval ,'천주교' );
+insert into code_religion values(code_religion_seq.nextval ,'불교' );
+insert into code_religion values(code_religion_seq.nextval ,'이슬람' );
+insert into code_religion values(code_religion_seq.nextval ,'무교' );
+insert into code_school values(code_school_seq.nextval ,'고졸' );
+insert into code_school values(code_school_seq.nextval ,'전문대졸' );
+insert into code_school values(code_school_seq.nextval ,'일반대졸' );
+
+
+
+insert into staff values(staff_seq.nextval ,'주영일','9999991000000',2,5,'2019-03-01');
+insert into staff_skill values(staff_skill_seq.nextval ,1,1);
+insert into staff_skill values(staff_skill_seq.nextval ,1,2);
+insert into staff values(staff_seq.nextval ,'주영순','9999992999999',2,5,'2010-01-01');
+insert into staff_skill values(staff_skill_seq.nextval ,2,3);
+insert into staff_skill values(staff_skill_seq.nextval ,2,4);
+insert into staff values(staff_seq.nextval ,'주영삼','9999991999999',2,5,'2010-06-01');
+insert into staff_skill values(staff_skill_seq.nextval ,3,1);
+insert into staff_skill values(staff_skill_seq.nextval ,3,4);
+insert into staff values(staff_seq.nextval ,'주영오','9999991779999',2,5,'2010-09-01');
+insert into staff_skill values(staff_skill_seq.nextval ,4,2);
+insert into staff_skill values(staff_skill_seq.nextval ,4,3);
+insert into staff values(staff_seq.nextval ,'주영칠','9999991779988',3,2,'2019-09-01');
+insert into staff_skill values(staff_skill_seq.nextval ,5,1);
+insert into staff_skill values(staff_skill_seq.nextval ,5,2);
+insert into staff_skill values(staff_skill_seq.nextval ,5,3);
+insert into staff_skill values(staff_skill_seq.nextval ,5,5);
+insert into staff values(staff_seq.nextval ,'주영육','9999991776677',1,4,'2014-01-01');
+insert into staff_skill values(staff_skill_seq.nextval ,6,4);
+insert into staff values(staff_seq.nextval ,'주영여','9999991776671',2,3,'2014-01-01');
+insert into staff_skill values(staff_skill_seq.nextval ,7,2);
+
+
+insert into staff values(staff_seq.nextval ,'주영현','9999991775671',2,5,'2010-03-01');
+
+
+
+insert into staff values(staff_seq.nextval ,'주영신','9999992773674',2,5,'1998-03-01');
+insert into staff_skill values(staff_skill_seq.nextval ,9,3);
+insert into staff_skill values(staff_skill_seq.nextval ,9,5);
+
+insert into staff values(staff_seq.nextval ,'주영신수','9909091773674',2,5,'1980-03-01');
+insert into staff_skill values(staff_skill_seq.nextval ,9,3);
+insert into staff_skill values(staff_skill_seq.nextval ,9,5);
+
+commit

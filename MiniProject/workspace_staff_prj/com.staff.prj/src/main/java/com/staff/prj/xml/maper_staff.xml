@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper 태그 선언 -->
+<mapper namespace="com.staff.prj.dao.StaffDAO">
+<sql id="staffWhere">
+
+			<if test="name_keyword!=null and name_keyword.length()>0">
+			and
+			(
+			upper(sf.staff_name) like upper('%${name_keyword}%')
+			or
+			upper(nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음')) like upper('%${name_keyword}%')
+			or
+			decode(substr(sf.jumin_no,8,1),'1','남','3','남','여') ='${name_keyword}'
+			or
+			upper(religion_name) like upper('%${name_keyword}%')
+			or 
+			to_char(to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD'),'YYYY-MM-DD(DY)') like '%${name_keyword}%'
+			)	
+			
+	
+			</if>
+			<if test="gender!=null and gender.size()>0">
+			and
+			<foreach collection="gender" item="gender" open="(" separator="or" close=")">
+			
+				<if test="gender.equals('man')">
+					decode(substr(sf.jumin_no,8,1),'1','남','3','남','여') ='남'
+				</if>
+				<if test="gender.equals('wo')">
+					decode(substr(sf.jumin_no,8,1),'1','남','3','남','여') ='여'
+				</if>
+			</foreach>
+			</if>
+			<if test="religion_code!=null">
+			and
+			sf.religion_code = ${religion_code}
+			</if>		
+			<if test="school_code!=null and school_code.size()>0">
+			and
+			<foreach collection="school_code" item="school_code" open="(" separator="or" close=")">
+			
+				<if test="school_code==1">
+					sf.school_code = 1
+				</if>
+				<if test="school_code==2">
+					sf.school_code = 2
+				</if>
+				<if test="school_code==3">
+					sf.school_code = 3
+				</if>
+			</foreach>
+			</if>
+			<if test="skill_code!=null and skill_code.size()>0">
+			and
+			<foreach collection="skill_code" item="skill_code" open="(" separator="or" close=")">
+			
+				<if test="skill_code==1">
+					upper(nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음')) like upper('%java%')
+				</if>
+				<if test="skill_code==2">
+					upper(nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음')) like upper('%jsp%')
+				</if>
+				<if test="skill_code==3">
+					upper(nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음')) like upper('%asp%')
+				</if>
+				<if test="skill_code==4">
+					upper(nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음')) like upper('%php%')
+				</if>
+				<if test="skill_code==5">
+					upper(nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음')) like upper('%Delphi%')
+				</if>
+				<if test="skill_code==999">
+					upper(nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음')) like upper('%없음%')
+				</if>
+			</foreach>
+			</if>
+			<if test="min_year!=null and min_year.length()>0 and min_month!=null and min_month.length()>0 and max_year!=null and max_year.length()>0 and max_month!=null and max_month.length()>0">
+			and
+				<![CDATA[to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD') >= to_date(#{min_year}||#{min_month}||'01','YYYYMMDD') and to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD') <= last_day(to_date(#{max_year}||#{max_month}||'01','YYYYMMDD')) ]]>
+			</if>
+			<if test="min_year!=null and min_year.length()>0 and min_month!=null and min_month.length()>0">
+			and
+				<![CDATA[to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD') >= to_date(#{min_year}||#{min_month}||'01','YYYYMMDD') and to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD') <= sysdate ]]>
+			</if>
+			<if test="max_year!=null and max_year.length()>0 and max_month!=null and max_month.length()>0">
+			and
+				<![CDATA[to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD') >= to_date('10000101','YYYYMMDD') and to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD') <= last_day(to_date(#{max_year}||#{max_month}||'01','YYYYMMDD')) ]]>
+			</if>
+</sql>
+
+
+
+
+
+
+	<select id="getStaffList" parameterType="com.staff.prj.dto.StaffSearchDTO"  resultType="java.util.HashMap">
+		
+		select * from (select rownum RNUM,B.* from (
+		select
+		    sf.staff_no	"staff_no"
+		    ,sf.staff_name "staff_name"
+		    ,sf.school_code "school_code"
+		    ,decode(substr(sf.jumin_no,8,1),'1','남','3','남','여') "gender"
+		    ,nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음') "skill_name"
+		    ,cr.religion_name "religion_name"
+		    ,to_char(to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD'),'YYYY-MM-DD(DY)') "graduate_day"
+		from (((staff sf left outer join staff_skill sfk
+		on   sf.staff_no = sfk.staff_no)  left outer join  code_skill cdsk  on cdsk.skill_code = sfk.skill_code)
+		left outer join code_religion cr on sf.religion_code = cr.religion_code)
+		group by sf.staff_no,sf.staff_name,sf.jumin_no,cr.religion_name,sf.graduate_day,sf.school_code,sf.religion_code
+		having
+			1=1
+		<include refid="staffWhere"/>
+		<if test="staff_name_sort==null and gender_sort==null and religion_sort==null and staff_skill_sort==null and graduate_day_sort==null">
+		order by
+			sf.staff_no desc
+		</if>
+
+		<if test="staff_name_sort==1">
+		order by
+			sf.staff_name asc
+		</if>
+		<if test="staff_name_sort==2">
+		order by
+			sf.staff_name desc
+		</if>
+	
+		<if test="gender_sort==1">
+		order by
+			decode(substr(sf.jumin_no,8,1),'1','남','3','남','여') asc
+		</if>
+		<if test="gender_sort==2">
+		order by
+			decode(substr(sf.jumin_no,8,1),'1','남','3','남','여') desc
+		</if>	
+				
+		<if test="religion_sort==1">
+		order by
+			cr.religion_name asc
+		</if>
+		<if test="religion_sort==2">
+		order by
+			cr.religion_name desc
+		</if>	
+		
+		<if test="staff_skill_sort==1">
+		order by
+			nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음') asc
+		</if>
+		<if test="staff_skill_sort==2">
+		order by
+			nvl(LISTAGG(cdsk.skill_name, ',') WITHIN GROUP(ORDER BY cdsk.skill_name asc),'없음') desc
+		</if>			
+	
+		<if test="graduate_day_sort==1">
+		order by
+			to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD') asc
+		</if>
+		<if test="graduate_day_sort==2">
+		order by
+			to_date(substr(sf.graduate_day,1,4)||substr(sf.graduate_day,6,2)||substr(sf.graduate_day,9,2),'YYYY-MM-DD') desc
+		</if>			
+			
+		) B <![CDATA[where rownum<=${selectPageNo*rowCntPerPage}) where RNUM>=${selectPageNo*rowCntPerPage-rowCntPerPage+1}]]>	
+			
+	</select>
+	
+	<select id="getStaffListAllCnt" parameterType="com.staff.prj.dto.StaffSearchDTO"   resultType="int">
+
+		select
+			count(count(*)) "Cnt"
+		from (((staff sf left outer join staff_skill sfk
+		on   sf.staff_no = sfk.staff_no)  left outer join  code_skill cdsk  on cdsk.skill_code = sfk.skill_code)
+		left outer join code_religion cr on sf.religion_code = cr.religion_code)
+		group by sf.staff_no,sf.staff_name,sf.jumin_no,cr.religion_name,sf.graduate_day,sf.school_code,sf.religion_code
+		having
+			1=1
+		<include refid="staffWhere"/>
+		order by
+			sf.staff_no desc
+
+			
+			
+	</select>
+	
+	
+	<select id="getSkillList"  resultType="java.util.HashMap">
+		select
+			skill_code "skill_code"
+			,skill_name "skill_name"
+		from code_skill
+	</select>
+	
+	<select id="getReligionList"  resultType="java.util.HashMap">
+		select
+		 religion_code "religion_code"
+		 ,religion_name "religion_name"
+		from code_religion
+	</select>
+	
+	<select id="getSchoolList"  resultType="java.util.HashMap">
+		select
+		 school_code "school_code"
+		 ,school_name "school_name"
+		from code_school
+	</select>
+
+		
+		
+	<select id="getMin_Year"  resultType="String">
+		select
+		min(to_number(to_char(to_date(substr(graduate_day,1,4)||substr(graduate_day,6,2)||substr(graduate_day,9,2),'YYYY-MM-DD'),'YYYY'))) "min_year"
+		from staff
+	</select>
+	
+	
+	<select id="getMax_Year"  resultType="String">
+        select
+		max(to_number(to_char(to_date(substr(graduate_day,1,4)||substr(graduate_day,6,2)||substr(graduate_day,9,2),'YYYY-MM-DD'),'YYYY'))) "max_year"
+		from staff
+	</select>	
+	
+
+
+
+	<insert id="getInputStaffCnt" parameterType="com.staff.prj.dto.StaffDTO">
+	insert into staff(
+		staff_no
+		,staff_name
+		,jumin_no
+		,school_code
+		,religion_code
+		,graduate_day
+	
+	) values(
+		(select nvl(max(staff_no),0)+1 from staff)
+		,#{staff_name}
+		,#{front_jumin_no}||'-'||#{back_jumin_no}
+		,#{school_code}
+		,#{religion_code}
+		,#{graduate_day}
+	)
+	</insert>
+
+
+
+	<insert id="getInputStaffSkillCnt" parameterType="com.staff.prj.dto.StaffDTO">
+	<if test="skill_code!=null and skill_code.size()>0">
+	insert all
+	<foreach item="skill" index="index" collection="skill_code" close="SELECT * FROM DUAL">
+	into staff_skill(
+		staff_skill_no
+		,staff_no
+		,skill_code
+	) values
+		
+		((select nvl(max(staff_skill_no),0)+1 from staff_skill)+${index},(select nvl(max(staff_no),1) from staff),${skill})
+	</foreach>
+	</if>
+	</insert>
+
+
+
+	<insert id="getUpdateStaffSkillCnt" parameterType="com.staff.prj.dto.StaffDTO">
+	<if test="skill_code!=null and skill_code.size()>0">
+	insert all
+	<foreach item="skill" index="index" collection="skill_code" close="SELECT * FROM DUAL">
+	into staff_skill(
+		staff_skill_no
+		,staff_no
+		,skill_code
+	) values
+		
+		((select nvl(max(staff_skill_no),0)+1 from staff_skill)+${index},#{staff_no},${skill})
+	</foreach>
+	</if>
+	</insert>
+
+
+
+
+
+
+
+
+	<select id="getStaff"  parameterType="int" resultType="com.staff.prj.dto.StaffDTO">
+        select
+        	staff_no "staff_no"
+        	,staff_name "staff_name"
+		     ,substr(jumin_no ,1,6) "front_jumin_no"
+             ,substr(jumin_no,8,7) "back_jumin_no"
+             ,school_code "school_code"
+             ,religion_code "religion_code"
+             ,graduate_day "graduate_day"
+		from staff
+		where
+			staff_no = #{staff_no}
+	</select>	
+
+	<select id="getStaffSkill"  parameterType="int" resultType="java.util.HashMap">
+        select
+        	skill_code "skill_code"
+		from staff_skill
+		where
+			staff_no = #{staff_no}
+	</select>	
+
+
+	<select id="getStaffCnt"  parameterType="com.staff.prj.dto.StaffDTO" resultType="int">
+        select
+        	count(*)
+		from staff
+		where
+			staff_no = #{staff_no}
+	</select>	
+
+
+
+	<select id="getStaffSkillCnt"  parameterType="com.staff.prj.dto.StaffDTO" resultType="int">
+        select
+        	count(*)
+		from staff_skill
+		where
+			staff_no = #{staff_no}
+	</select>	
+
+
+	<delete id="getDeleteStaffSkillCnt"  parameterType="com.staff.prj.dto.StaffDTO" >
+		delete from staff_skill
+		where
+			staff_no = #{staff_no}
+	</delete>	
+
+
+	<delete id="getDeleteStaffCnt"  parameterType="com.staff.prj.dto.StaffDTO" >
+		delete from staff
+		where
+			staff_no = #{staff_no}
+	</delete>	
+
+	
+	<update id="getUpdateStaffCnt"  parameterType="com.staff.prj.dto.StaffDTO" >
+		update staff set 
+        	staff_name  = #{staff_name}
+		     ,jumin_no = #{front_jumin_no}||'-'||#{back_jumin_no}
+             ,school_code  = #{school_code}
+             ,religion_code = #{religion_code}
+             ,graduate_day  = #{graduate_day}
+		
+		where
+		    staff_no = #{staff_no}
+	</update>	
+	
+	<select id="getSYSDATE"  resultType="String">
+        select
+        	to_char(sysdate,'YYYYMMDD')
+		from dual
+	</select>	
+
+	<select id="getJumin_no"  parameterType="com.staff.prj.dto.StaffDTO" resultType="int">
+        select
+        	count(*)
+		from staff
+		where
+		jumin_no = #{front_jumin_no}||'-'||#{back_jumin_no}
+		
+	</select>		
+	
+	
+</mapper>
+
+
